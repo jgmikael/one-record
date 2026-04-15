@@ -1,0 +1,370 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://iri.suomi.fi/model/fcior#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "busdoc": "https://iri.suomi.fi/model/busdoc/",
+    "uncefact": "https://vocabulary.uncefact.org#",
+    "schema": "http://schema.org/",
+    
+    "OneRecordOrder": {
+      "@id": "fcior:Order",
+      "@type": "@id"
+    },
+    
+    "id": "@id",
+    "type": "@type",
+    
+    "orderNumber": {
+      "@id": "busdoc:identificationID",
+      "@type": "xsd:string"
+    },
+    
+    "issueDate": {
+      "@id": "busdoc:issueDate",
+      "@type": "xsd:date"
+    },
+    
+    "issueTime": {
+      "@id": "busdoc:issueTime",
+      "@type": "xsd:time"
+    },
+    
+    "buyerReference": {
+      "@id": "busdoc:buyerReference",
+      "@type": "xsd:string"
+    },
+    
+    "orderTypeCode": {
+      "@id": "busdoc:orderTypeCode",
+      "@type": "xsd:string"
+    },
+    
+    "documentCurrency": {
+      "@id": "busdoc:documentCurrencyCode",
+      "@type": "xsd:string"
+    },
+    
+    "accountingCost": {
+      "@id": "busdoc:accountingCost",
+      "@type": "xsd:string"
+    },
+    
+    "buyerCustomerParty": {
+      "@id": "busdoc:buyerCustomerParty",
+      "@type": "@id"
+    },
+    
+    "sellerSupplierParty": {
+      "@id": "busdoc:sellerSupplierParty",
+      "@type": "@id"
+    },
+    
+    "deliveryLocation": {
+      "@id": "busdoc:deliveryLocation",
+      "@type": "@id"
+    },
+    
+    "deliveryDate": {
+      "@id": "busdoc:actualDeliveryDate",
+      "@type": "xsd:date"
+    },
+    
+    "requestedDeliveryDate": {
+      "@id": "busdoc:requestedDeliveryDate",
+      "@type": "xsd:date"
+    },
+    
+    "paymentTerms": {
+      "@id": "busdoc:paymentTerms",
+      "@type": "@id"
+    },
+    
+    "paymentMeansCode": {
+      "@id": "busdoc:paymentMeansCode",
+      "@type": "xsd:string"
+    },
+    
+    "allowanceCharge": {
+      "@id": "busdoc:allowanceCharge",
+      "@type": "@id"
+    },
+    
+    "taxTotal": {
+      "@id": "busdoc:taxTotal",
+      "@type": "@id"
+    },
+    
+    "legalMonetaryTotal": {
+      "@id": "busdoc:legalMonetaryTotal",
+      "@type": "@id"
+    },
+    
+    "orderLine": {
+      "@id": "busdoc:orderLine",
+      "@type": "@id",
+      "@container": "@list"
+    },
+    
+    "Party": {
+      "@id": "busdoc:Party",
+      "@type": "@id"
+    },
+    
+    "partyIdentification": {
+      "@id": "busdoc:partyIdentification",
+      "@type": "xsd:string"
+    },
+    
+    "partyName": {
+      "@id": "busdoc:partyName",
+      "@type": "xsd:string"
+    },
+    
+    "postalAddress": {
+      "@id": "busdoc:postalAddress",
+      "@type": "@id"
+    },
+    
+    "partyTaxScheme": {
+      "@id": "busdoc:partyTaxScheme",
+      "@type": "@id"
+    },
+    
+    "partyLegalEntity": {
+      "@id": "busdoc:partyLegalEntity",
+      "@type": "@id"
+    },
+    
+    "contact": {
+      "@id": "busdoc:contact",
+      "@type": "@id"
+    },
+    
+    "Address": {
+      "@id": "busdoc:Address",
+      "@type": "@id"
+    },
+    
+    "streetName": {
+      "@id": "busdoc:streetName",
+      "@type": "xsd:string"
+    },
+    
+    "additionalStreetName": {
+      "@id": "busdoc:additionalStreetName",
+      "@type": "xsd:string"
+    },
+    
+    "cityName": {
+      "@id": "busdoc:cityName",
+      "@type": "xsd:string"
+    },
+    
+    "postalZone": {
+      "@id": "busdoc:postalZone",
+      "@type": "xsd:string"
+    },
+    
+    "countrySubentity": {
+      "@id": "busdoc:countrySubentity",
+      "@type": "xsd:string"
+    },
+    
+    "countryCode": {
+      "@id": "busdoc:identificationCode",
+      "@type": "xsd:string"
+    },
+    
+    "OrderLine": {
+      "@id": "busdoc:OrderLine",
+      "@type": "@id"
+    },
+    
+    "lineID": {
+      "@id": "busdoc:identificationID",
+      "@type": "xsd:string"
+    },
+    
+    "orderedQuantity": {
+      "@id": "busdoc:quantity",
+      "@type": "xsd:decimal"
+    },
+    
+    "lineExtensionAmount": {
+      "@id": "busdoc:lineExtensionAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "totalTaxAmount": {
+      "@id": "busdoc:taxAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "item": {
+      "@id": "busdoc:item",
+      "@type": "@id"
+    },
+    
+    "price": {
+      "@id": "busdoc:price",
+      "@type": "@id"
+    },
+    
+    "Item": {
+      "@id": "busdoc:Item",
+      "@type": "@id"
+    },
+    
+    "itemName": {
+      "@id": "busdoc:name",
+      "@type": "xsd:string"
+    },
+    
+    "itemDescription": {
+      "@id": "busdoc:description",
+      "@type": "xsd:string"
+    },
+    
+    "sellersItemIdentification": {
+      "@id": "busdoc:sellersItemIdentification",
+      "@type": "xsd:string"
+    },
+    
+    "standardItemIdentification": {
+      "@id": "busdoc:standardItemIdentification",
+      "@type": "xsd:string"
+    },
+    
+    "classifiedTaxCategory": {
+      "@id": "busdoc:classifiedTaxCategory",
+      "@type": "@id"
+    },
+    
+    "Price": {
+      "@id": "busdoc:Price",
+      "@type": "@id"
+    },
+    
+    "priceAmount": {
+      "@id": "busdoc:priceAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "baseQuantity": {
+      "@id": "busdoc:baseQuantity",
+      "@type": "xsd:decimal"
+    },
+    
+    "MonetaryTotal": {
+      "@id": "busdoc:MonetaryTotal",
+      "@type": "@id"
+    },
+    
+    "lineExtensionTotalAmount": {
+      "@id": "busdoc:lineExtensionAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "taxExclusiveAmount": {
+      "@id": "busdoc:taxExclusiveAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "taxInclusiveAmount": {
+      "@id": "busdoc:taxInclusiveAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "allowanceTotalAmount": {
+      "@id": "busdoc:allowanceTotalAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "chargeTotalAmount": {
+      "@id": "busdoc:chargeTotalAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "prepaidAmount": {
+      "@id": "busdoc:prepaidAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "payableAmount": {
+      "@id": "busdoc:payableAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "TaxTotal": {
+      "@id": "busdoc:TaxTotal",
+      "@type": "@id"
+    },
+    
+    "taxSubtotal": {
+      "@id": "busdoc:taxSubtotal",
+      "@type": "@id",
+      "@container": "@list"
+    },
+    
+    "TaxSubtotal": {
+      "@id": "busdoc:TaxSubtotal",
+      "@type": "@id"
+    },
+    
+    "taxableAmount": {
+      "@id": "busdoc:taxableAmount",
+      "@type": "xsd:decimal"
+    },
+    
+    "taxCategory": {
+      "@id": "busdoc:taxCategory",
+      "@type": "@id"
+    },
+    
+    "TaxCategory": {
+      "@id": "busdoc:TaxCategory",
+      "@type": "@id"
+    },
+    
+    "taxCategoryID": {
+      "@id": "busdoc:identificationID",
+      "@type": "xsd:string"
+    },
+    
+    "percent": {
+      "@id": "busdoc:percent",
+      "@type": "xsd:decimal"
+    },
+    
+    "taxScheme": {
+      "@id": "busdoc:taxScheme",
+      "@type": "@id"
+    },
+    
+    "metadata": {
+      "@id": "fcior:sourceMetadata",
+      "@type": "@id"
+    },
+    
+    "sourceSystem": {
+      "@id": "fcior:sourceSystem",
+      "@type": "xsd:string"
+    },
+    
+    "sourceDocumentID": {
+      "@id": "fcior:sourceDocumentIdentifier",
+      "@type": "xsd:string"
+    },
+    
+    "transformedAt": {
+      "@id": "fcior:transformationTimestamp",
+      "@type": "xsd:dateTime"
+    },
+    
+    "mappingVersion": {
+      "@id": "fcior:mappingRuleVersion",
+      "@type": "xsd:string"
+    }
+  }
+}

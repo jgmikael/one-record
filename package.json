@@ -1,0 +1,42 @@
+{
+  "name": "one-record-order-demo",
+  "version": "1.0.0",
+  "description": "One Record Order Demo - SAP to UBL-aligned canonical Order transformation with JSON-LD semantics",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "dev:backend": "npm run dev -w @one-record/backend",
+    "dev:frontend": "npm run dev -w @one-record/frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "start": "npm run start -w @one-record/backend"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": [
+    "one-record",
+    "ubl",
+    "order",
+    "sap",
+    "json-ld",
+    "fcior",
+    "busdoc",
+    "semantic-web"
+  ],
+  "author": "Mikael af Hällström",
+  "license": "MIT"
+}

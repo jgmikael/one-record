@@ -1,0 +1,34 @@
+PREFIX busdoc:     <https://iri.suomi.fi/model/busdoc/1.0.2/>
+PREFIX dcap:       <http://purl.org/ws-mmi-dc/terms/>
+PREFIX dcterms:    <http://purl.org/dc/terms/>
+PREFIX fcior:      <https://iri.suomi.fi/model/fcior/>
+PREFIX geo:        <http://www.opengis.net/ont/geosparql#>
+PREFIX http:       <http://www.w3.org/2011/http#>
+PREFIX owl:        <http://www.w3.org/2002/07/owl#>
+PREFIX rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:       <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sh:         <http://www.w3.org/ns/shacl#>
+PREFIX skos:       <http://www.w3.org/2004/02/skos/core#>
+PREFIX suomi-meta: <https://iri.suomi.fi/model/suomi-meta/>
+PREFIX xsd:        <http://www.w3.org/2001/XMLSchema#>
+
+fcior:  rdf:type                      suomi-meta:ApplicationProfile , owl:Ontology;
+        rdfs:comment                  "Compilation of the following UBL 2.4 documents:\nCatalogue\nCatalogue response\nOrder\nOrder response\nDespatch advice\nInvoice"@en;
+        rdfs:label                    "Finnish Construction Industry One Record"@en , "Finnish Construction Industry One Record"@fi;
+        dcterms:contributor           <urn:uuid:0e7e4f57-be57-4f99-bb1f-bfdcf0b6948a>;
+        dcterms:created               "2025-05-07T12:17:16.433Z"^^xsd:dateTime;
+        dcterms:identifier            "938ef80c-2246-4517-8857-e0a138d095c9";
+        dcterms:isPartOf              <http://urn.fi/URN:NBN:fi:au:ptvl:v1007> , <http://urn.fi/URN:NBN:fi:au:ptvl:v1105>;
+        dcterms:language              "fi" , "en";
+        dcterms:modified              "2026-02-27T07:24:41.654Z"^^xsd:dateTime;
+        dcterms:requires              busdoc:;
+        dcap:preferredXMLNamespace    "https://iri.suomi.fi/model/fcior/";
+        dcap:preferredXMLNamespacePrefix
+                "fcior";
+        owl:imports                   <https://vocabulary.uncefact.org/>;
+        owl:priorVersion              <https://iri.suomi.fi/model/fcior/0.0.3/>;
+        suomi-meta:contact            "yhteentoimivuus@dvv.fi";
+        suomi-meta:contentModified    "2025-05-07T12:17:16.433Z"^^xsd:dateTime;
+        suomi-meta:creator            "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:modifier           "5dc030a4-740f-4dde-9548-4e6e797899d8";
+        suomi-meta:publicationStatus  <http://uri.suomi.fi/codelist/interoperabilityplatform/interoperabilityplatform_status/code/DRAFT> .

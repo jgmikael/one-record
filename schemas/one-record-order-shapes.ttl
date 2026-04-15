@@ -1,0 +1,367 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix fcior: <https://iri.suomi.fi/model/fcior#> .
+@prefix busdoc: <https://iri.suomi.fi/model/busdoc/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# One Record Order Shape
+fcior:OrderShape
+    a sh:NodeShape ;
+    sh:targetClass fcior:Order ;
+    sh:property [
+        sh:path busdoc:identificationID ;
+        sh:name "Order Number" ;
+        sh:description "Unique identifier for the order" ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:issueDate ;
+        sh:name "Issue Date" ;
+        sh:description "Date when the order was issued" ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:buyerReference ;
+        sh:name "Buyer Reference" ;
+        sh:description "Buyer's purchase order reference" ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:documentCurrencyCode ;
+        sh:name "Currency" ;
+        sh:description "Currency of the order" ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[A-Z]{3}$" ;
+    ] ;
+    sh:property [
+        sh:path busdoc:buyerCustomerParty ;
+        sh:name "Buyer" ;
+        sh:description "The buyer party" ;
+        sh:node fcior:PartyShape ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:sellerSupplierParty ;
+        sh:name "Seller" ;
+        sh:description "The seller party" ;
+        sh:node fcior:PartyShape ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:deliveryLocation ;
+        sh:name "Delivery Location" ;
+        sh:description "Delivery address" ;
+        sh:node fcior:AddressShape ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:requestedDeliveryDate ;
+        sh:name "Requested Delivery Date" ;
+        sh:description "Date when delivery is requested" ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:legalMonetaryTotal ;
+        sh:name "Monetary Total" ;
+        sh:description "Total monetary amounts" ;
+        sh:node fcior:MonetaryTotalShape ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:taxTotal ;
+        sh:name "Tax Total" ;
+        sh:description "Total tax amounts" ;
+        sh:node fcior:TaxTotalShape ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:orderLine ;
+        sh:name "Order Lines" ;
+        sh:description "Individual order line items" ;
+        sh:node fcior:OrderLineShape ;
+        sh:minCount 1 ;
+    ] .
+
+# Party Shape
+fcior:PartyShape
+    a sh:NodeShape ;
+    sh:targetClass busdoc:Party ;
+    sh:property [
+        sh:path busdoc:partyIdentification ;
+        sh:name "Party ID" ;
+        sh:description "Unique identifier for the party" ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:partyName ;
+        sh:name "Party Name" ;
+        sh:description "Name of the party" ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:postalAddress ;
+        sh:name "Address" ;
+        sh:description "Postal address of the party" ;
+        sh:node fcior:AddressShape ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:partyTaxScheme ;
+        sh:name "Tax Scheme" ;
+        sh:description "Tax registration information" ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:contact ;
+        sh:name "Contact" ;
+        sh:description "Contact information" ;
+        sh:maxCount 1 ;
+    ] .
+
+# Address Shape
+fcior:AddressShape
+    a sh:NodeShape ;
+    sh:targetClass busdoc:Address ;
+    sh:property [
+        sh:path busdoc:streetName ;
+        sh:name "Street Name" ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:cityName ;
+        sh:name "City" ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:postalZone ;
+        sh:name "Postal Code" ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:identificationCode ;
+        sh:name "Country Code" ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:pattern "^[A-Z]{2}$" ;
+    ] .
+
+# Order Line Shape
+fcior:OrderLineShape
+    a sh:NodeShape ;
+    sh:targetClass busdoc:OrderLine ;
+    sh:property [
+        sh:path busdoc:identificationID ;
+        sh:name "Line ID" ;
+        sh:description "Unique identifier for the order line" ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:quantity ;
+        sh:name "Ordered Quantity" ;
+        sh:description "Quantity ordered" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minExclusive 0 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:lineExtensionAmount ;
+        sh:name "Line Amount" ;
+        sh:description "Total amount for this line (excluding tax)" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:item ;
+        sh:name "Item" ;
+        sh:description "The item being ordered" ;
+        sh:node fcior:ItemShape ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:price ;
+        sh:name "Price" ;
+        sh:description "Unit price" ;
+        sh:node fcior:PriceShape ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+# Item Shape
+fcior:ItemShape
+    a sh:NodeShape ;
+    sh:targetClass busdoc:Item ;
+    sh:property [
+        sh:path busdoc:name ;
+        sh:name "Item Name" ;
+        sh:description "Name/description of the item" ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:sellersItemIdentification ;
+        sh:name "Seller's Item ID" ;
+        sh:description "Seller's identifier for this item" ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:classifiedTaxCategory ;
+        sh:name "Tax Category" ;
+        sh:description "Tax category for this item" ;
+        sh:node fcior:TaxCategoryShape ;
+        sh:minCount 1 ;
+    ] .
+
+# Price Shape
+fcior:PriceShape
+    a sh:NodeShape ;
+    sh:targetClass busdoc:Price ;
+    sh:property [
+        sh:path busdoc:priceAmount ;
+        sh:name "Price Amount" ;
+        sh:description "The price per unit" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:baseQuantity ;
+        sh:name "Base Quantity" ;
+        sh:description "Base quantity for the price" ;
+        sh:datatype xsd:decimal ;
+        sh:maxCount 1 ;
+    ] .
+
+# Monetary Total Shape
+fcior:MonetaryTotalShape
+    a sh:NodeShape ;
+    sh:targetClass busdoc:MonetaryTotal ;
+    sh:property [
+        sh:path busdoc:lineExtensionAmount ;
+        sh:name "Line Extension Total" ;
+        sh:description "Sum of all line amounts" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:taxExclusiveAmount ;
+        sh:name "Tax Exclusive Amount" ;
+        sh:description "Total amount excluding tax" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:taxInclusiveAmount ;
+        sh:name "Tax Inclusive Amount" ;
+        sh:description "Total amount including tax" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:payableAmount ;
+        sh:name "Payable Amount" ;
+        sh:description "Total payable amount" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+# Tax Total Shape
+fcior:TaxTotalShape
+    a sh:NodeShape ;
+    sh:targetClass busdoc:TaxTotal ;
+    sh:property [
+        sh:path busdoc:taxAmount ;
+        sh:name "Tax Amount" ;
+        sh:description "Total tax amount" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:taxSubtotal ;
+        sh:name "Tax Subtotal" ;
+        sh:description "Tax breakdown by category/rate" ;
+        sh:node fcior:TaxSubtotalShape ;
+    ] .
+
+# Tax Subtotal Shape
+fcior:TaxSubtotalShape
+    a sh:NodeShape ;
+    sh:targetClass busdoc:TaxSubtotal ;
+    sh:property [
+        sh:path busdoc:taxableAmount ;
+        sh:name "Taxable Amount" ;
+        sh:description "Amount subject to this tax" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:taxAmount ;
+        sh:name "Tax Amount" ;
+        sh:description "Tax amount for this category" ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:taxCategory ;
+        sh:name "Tax Category" ;
+        sh:description "Tax category details" ;
+        sh:node fcior:TaxCategoryShape ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+# Tax Category Shape
+fcior:TaxCategoryShape
+    a sh:NodeShape ;
+    sh:targetClass busdoc:TaxCategory ;
+    sh:property [
+        sh:path busdoc:identificationID ;
+        sh:name "Tax Category ID" ;
+        sh:description "Tax category identifier (e.g., S for standard rate)" ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:percent ;
+        sh:name "Tax Percent" ;
+        sh:description "Tax percentage rate" ;
+        sh:datatype xsd:decimal ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path busdoc:taxScheme ;
+        sh:name "Tax Scheme" ;
+        sh:description "Tax scheme (usually VAT)" ;
+        sh:maxCount 1 ;
+    ] .
