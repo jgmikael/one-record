@@ -1,0 +1,27 @@
+{
+  "name": "@one-record/api",
+  "version": "1.0.0",
+  "description": "REST API for One Record SAP transformation demo",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "morgan": "^1.10.0",
+    "@one-record/mapping-engine": "file:../../packages/mapping-engine",
+    "@one-record/persistence": "file:../../packages/persistence"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/cors": "^2.8.13",
+    "@types/morgan": "^1.9.4",
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.4",
+    "ts-node": "^10.9.1"
+  }
+}
