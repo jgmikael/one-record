@@ -1,0 +1,19 @@
+{
+  "name": "@one-record/persistence",
+  "version": "1.0.0",
+  "description": "SQLite persistence layer for One Record demo",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.2.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.4"
+  }
+}
