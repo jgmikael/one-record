@@ -27,10 +27,26 @@ function showTab(tabName) {
 }
 
 // Load sample order
-function loadSample() {
+function loadSample(sampleNumber = 1) {
     const textarea = document.getElementById('sap-input');
-    textarea.value = JSON.stringify(SAMPLE_SAP_ORDER, null, 2);
-    showMessage('Sample SAP order loaded successfully! Click "Transform" to convert.', 'success');
+    let sampleData;
+    let sampleName;
+    
+    if (sampleNumber === 2) {
+        sampleData = SAMPLE_SAP_ORDER_002;
+        sampleName = 'Sample #2: Electronics (UK Buyer - Electric Bikes)';
+    } else {
+        sampleData = SAMPLE_SAP_ORDER;
+        sampleName = 'Sample #1: Construction (Finnish - Concrete & Rebar)';
+    }
+    
+    textarea.value = JSON.stringify(sampleData, null, 2);
+    showMessage(`${sampleName} loaded successfully! Click "Transform" to convert.`, 'success');
+    
+    // Update URL to reflect sample selection
+    const url = new URL(window.location);
+    url.searchParams.set('sample', sampleNumber);
+    window.history.replaceState({}, '', url);
 }
 
 // Clear all
@@ -102,10 +118,22 @@ function clearMessage() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('One Record Demo initialized');
     
+    // Check URL parameters for auto-loading sample
+    const urlParams = new URLSearchParams(window.location.search);
+    const sampleParam = urlParams.get('sample');
+    
+    if (sampleParam) {
+        const sampleNumber = parseInt(sampleParam, 10);
+        if (sampleNumber === 1 || sampleNumber === 2) {
+            loadSample(sampleNumber);
+            return; // Skip welcome message if auto-loading
+        }
+    }
+    
     // Show welcome message
     setTimeout(() => {
         showMessage(
-            '👋 Welcome! Click "Load Sample SAP Order" to try the transformation, or paste your own SAP order JSON.',
+            '👋 Welcome! Choose a sample order to try the transformation, or paste your own SAP order JSON.',
             'success'
         );
     }, 500);

@@ -301,7 +301,8 @@
                 <p>Transform SAP orders to fcior/UBL canonical format in your browser - no backend required.</p>
 
                 <div class="btn-group">
-                    <button class="btn" onclick="loadSample()">📥 Load Sample SAP Order</button>
+                    <button class="btn" onclick="loadSample(1)">📥 Sample #1: Construction</button>
+                    <button class="btn" onclick="loadSample(2)">📥 Sample #2: Electronics</button>
                     <button class="btn" onclick="transformOrder()">⚡ Transform</button>
                     <button class="btn" onclick="clearAll()">🗑️ Clear</button>
                 </div>
@@ -388,12 +389,32 @@
                     </div>
                 </div>
 
+                <h3>Sample Orders Available</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🏗️ Sample #1: Construction</h4>
+                        <p><strong>Scenario:</strong> Finnish construction company ordering concrete and rebar</p>
+                        <p><strong>Industry:</strong> Building materials</p>
+                        <p><strong>Currency:</strong> EUR</p>
+                        <p><strong>Line Items:</strong> 2 (C30/37 Concrete, Steel Mesh K8-150)</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚡ Sample #2: Electronics</h4>
+                        <p><strong>Scenario:</strong> UK buyer ordering electric bikes from EU supplier</p>
+                        <p><strong>Industry:</strong> Electric mobility equipment</p>
+                        <p><strong>Currency:</strong> EUR</p>
+                        <p><strong>Line Items:</strong> 1 (Electric Bike Model X1)</p>
+                        <p><strong>Based on:</strong> ORDERS05 IDoc structure</p>
+                    </div>
+                </div>
+
                 <h3>Use Cases</h3>
                 <ul style="margin: 15px 0 15px 30px;">
                     <li>SAP integration with EU Business Wallet (upcoming)</li>
                     <li>Construction industry supply chain automation</li>
-                    <li>Cross-border eInvoicing with semantic verification</li>
-                    <li>Digital transformation for Finnish public procurement</li>
+                    <li>Cross-border equipment procurement with semantic verification</li>
+                    <li>Digital transformation for public and private procurement</li>
+                    <li>Multi-industry B2B order standardization</li>
                 </ul>
             </div>
         </div>
@@ -558,6 +579,7 @@ docker-compose up
     </div>
 
     <script src="data/sample-sap-order.js"></script>
+    <script src="data/sap-order-002.js"></script>
     <script src="engine-lite.js"></script>
     <script src="demo.js"></script>
 </body>
