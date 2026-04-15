@@ -389,6 +389,23 @@
                     </div>
                 </div>
 
+                <h3>🌉 The Semantic Bridge Concept</h3>
+                <p>
+                    OneRecord uses <strong>semantic values</strong> that appear identically in SAP, the canonical model, and UBL/Peppol.
+                    This creates an <strong>automatic mapping bridge</strong> without manual coding.
+                </p>
+                <div class="code-block">
+                    <pre>SAP IDoc → <span style="color:#667eea;font-weight:bold;">ONE-ORD-0001</span> → UBL cbc:ID
+
+E1EDKA1(AG)/PARTN → <span style="color:#667eea;font-weight:bold;">EX-BUY-0001</span> → BuyerCustomerParty/EndpointID
+
+E1EDP19(003)/IDTNR → <span style="color:#667eea;font-weight:bold;">GTIN-EXAMPLE-0001</span> → StandardItemIdentification/ID</pre>
+                </div>
+                <p>
+                    The <strong style="color:#667eea;">blue values</strong> are OneRecord semantic identifiers that connect all three worlds automatically.
+                    See <a href="SEMANTIC_BRIDGE.md" target="_blank">SEMANTIC_BRIDGE.md</a> for complete mapping table.
+                </p>
+
                 <h3>Sample Orders Available</h3>
                 <div class="feature-grid">
                     <div class="feature-card">
@@ -397,14 +414,23 @@
                         <p><strong>Industry:</strong> Building materials</p>
                         <p><strong>Currency:</strong> EUR</p>
                         <p><strong>Line Items:</strong> 2 (C30/37 Concrete, Steel Mesh K8-150)</p>
+                        <p><strong>Structure:</strong> SAP ECC 6.0 JSON format</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⚡ Sample #2: Electronics</h4>
+                        <h4>⚡ Sample #2: Electronics (ORDERS05 IDoc)</h4>
                         <p><strong>Scenario:</strong> UK buyer ordering electric bikes from EU supplier</p>
                         <p><strong>Industry:</strong> Electric mobility equipment</p>
                         <p><strong>Currency:</strong> EUR</p>
                         <p><strong>Line Items:</strong> 1 (Electric Bike Model X1)</p>
-                        <p><strong>Based on:</strong> ORDERS05 IDoc structure</p>
+                        <p><strong>Structure:</strong> ORDERS05 IDoc with E1EDP19/E1EDP35/E1EDP20 segments</p>
+                        <p><strong>Includes:</strong></p>
+                        <ul style="margin: 10px 0 0 20px; text-align: left;">
+                            <li>Multiple product IDs (GTIN, UNSPSC)</li>
+                            <li>Serial numbers (E1EDP35)</li>
+                            <li>Digital Product Passport (DPP)</li>
+                            <li>Environmental Product Declaration (EPD)</li>
+                            <li>Hazmat classification (UN3481 - Li-ion batteries)</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -423,10 +449,39 @@
             <div class="demo-section">
                 <h2>Key Features</h2>
 
+                <h3>🌉 Semantic Bridge Features</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🎯 ORDERS05 IDoc Support</h4>
+                        <p>Full support for SAP ORDERS05 IDoc structure including E1EDP19 (product IDs), E1EDP35 (serialization), E1EDP20 (sustainability/hazmat)</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔗 Semantic Identifiers</h4>
+                        <p>Same values flow through SAP → OneRecord → UBL automatically (EX-BUY-0001, GTIN-EXAMPLE-0001, etc.)</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌱 Sustainability Docs</h4>
+                        <p>Digital Product Passport (DPP) and Environmental Product Declaration (EPD) as AdditionalDocumentReference</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚠️ Hazmat Classification</h4>
+                        <p>UN3481 (lithium-ion batteries) and other hazardous goods properly mapped to UBL HazardousItem</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔢 Multiple Product IDs</h4>
+                        <p>Seller, buyer, GTIN (0160), and UNSPSC classification codes all preserved in canonical format</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏷️ Serialization</h4>
+                        <p>Individual serial numbers (E1EDP35) mapped to ItemInstance/SerialID for product traceability</p>
+                    </div>
+                </div>
+
+                <h3>Core Transformation Features</h3>
                 <div class="feature-grid">
                     <div class="feature-card">
                         <h4>🎯 95% Confidence</h4>
-                        <p>Achieves 95% average confidence on realistic Finnish construction industry orders</p>
+                        <p>Achieves 95% average confidence on realistic industry orders (construction, electronics)</p>
                     </div>
                     <div class="feature-card">
                         <h4>📊 Field Traceability</h4>
@@ -564,6 +619,23 @@ docker-compose up
                     <li>W3C VC signature generation</li>
                     <li>Real-time SAP connector</li>
                     <li>OAuth2/JWT authentication</li>
+                </ul>
+
+                <h3>👥 BETK Working Group</h3>
+                <p><strong>OneRecord v0.9</strong> - Semantic business document transformation</p>
+                <p><strong>Lead:</strong> Kari Korpela</p>
+                <p><strong>Contributors:</strong></p>
+                <ul style="margin: 10px 0 15px 30px; columns: 2;">
+                    <li>Hannu Kivinen</li>
+                    <li>Henrik Vinell</li>
+                    <li>Juuso Autiosalo</li>
+                    <li>Jyrki Oraskari</li>
+                    <li>Mikael af Hällström</li>
+                    <li>Peter L. Borresen</li>
+                    <li>Rikard Larsson</li>
+                    <li>Teemu Alaluusua</li>
+                    <li>Tom Partanen</li>
+                    <li>Antti Taskinen</li>
                 </ul>
             </div>
         </div>

@@ -124,8 +124,71 @@ class OneRecordEngine {
         const quantity = sapItem.Quantity || {};
         const pricing = sapItem.Pricing || {};
         const schedule = sapItem.Schedule || {};
+        const productIds = sapItem.ProductIdentifiers || [];
+        const serialization = sapItem.Serialization || [];
+        const sustainability = sapItem.SustainabilityDocuments || [];
+        const hazmat = sapItem.HazardousMaterial || null;
 
-        return {
+        // Build item object with extended identifiers
+        const itemObj = {
+            "@type": "Item",
+            "description": material.MaterialDescription,
+            "name": material.MaterialDescription,
+            "classifiedTaxCategory": {
+                "id": pricing.TaxCode,
+                "percent": pricing.TaxRate,
+                "taxScheme": {
+                    "id": "VAT"
+                }
+            }
+        };
+
+        // Add product identifiers from E1EDP19 segments
+        productIds.forEach(pid => {
+            if (pid.IdentifierType === "SellersItemIdentification") {
+                itemObj.sellersItemIdentification = { "id": pid.ID };
+            } else if (pid.IdentifierType === "BuyersItemIdentification") {
+                itemObj.buyersItemIdentification = { "id": pid.ID };
+            } else if (pid.IdentifierType === "StandardItemIdentification") {
+                itemObj.standardItemIdentification = {
+                    "id": pid.ID,
+                    "schemeID": pid.SchemeID || "GTIN"
+                };
+            } else if (pid.IdentifierType === "ItemClassificationCode") {
+                itemObj.commodityClassification = {
+                    "itemClassificationCode": {
+                        "value": pid.ID,
+                        "listID": pid.SchemeID || "UNSPSC"
+                    }
+                };
+            }
+        });
+
+        // Fallback to legacy fields if no ProductIdentifiers
+        if (!itemObj.sellersItemIdentification && material.MaterialNumber) {
+            itemObj.sellersItemIdentification = { "id": material.MaterialNumber };
+        }
+        if (!itemObj.buyersItemIdentification && sapItem.CustomerMaterialNumber) {
+            itemObj.buyersItemIdentification = { "id": sapItem.CustomerMaterialNumber };
+        }
+
+        // Add serialization (E1EDP35)
+        if (serialization.length > 0) {
+            itemObj.itemInstance = serialization.map(s => ({
+                "serialID": s.SerialNumber
+            }));
+        }
+
+        // Add hazardous material info (E1EDP20)
+        if (hazmat) {
+            itemObj.hazardousItem = {
+                "id": hazmat.HazardItemID,
+                "hazardClassID": hazmat.HazardClassID,
+                "undgCode": hazmat.UNCode
+            };
+        }
+
+        const lineItem = {
             "@type": "OrderLine",
             "id": item.ItemNumber || `${index + 1}`,
             "note": sapItem.ItemText,
@@ -140,24 +203,7 @@ class OneRecordEngine {
                     "value": pricing.NetValue,
                     "currencyID": pricing.Currency || header.DocumentCurrency
                 },
-                "item": {
-                    "@type": "Item",
-                    "description": material.MaterialDescription,
-                    "name": material.MaterialDescription,
-                    "sellersItemIdentification": {
-                        "id": material.MaterialNumber
-                    },
-                    "buyersItemIdentification": {
-                        "id": sapItem.CustomerMaterialNumber || material.MaterialNumber
-                    },
-                    "classifiedTaxCategory": {
-                        "id": pricing.TaxCode,
-                        "percent": pricing.TaxRate,
-                        "taxScheme": {
-                            "id": "VAT"
-                        }
-                    }
-                },
+                "item": itemObj,
                 "price": {
                     "priceAmount": {
                         "value": pricing.NetPrice,
@@ -179,6 +225,17 @@ class OneRecordEngine {
                 }
             }
         };
+
+        // Add sustainability documents (E1EDP20 - DPP, EPD)
+        if (sustainability.length > 0) {
+            lineItem.additionalDocumentReference = sustainability.map(doc => ({
+                "id": doc.DocumentID,
+                "documentType": doc.DocumentType,
+                "documentDescription": doc.DocumentDescription
+            }));
+        }
+
+        return lineItem;
     }
 
     mapPaymentTerms(code) {

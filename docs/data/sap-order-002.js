@@ -200,7 +200,62 @@ const SAMPLE_SAP_ORDER_002 = {
       "MaterialGroup3": "BIKES",
       "ProfitCenter": "2000",
       "WBSElement": "P-2000-FL-01",
-      "AccountAssignment": "Fleet Upgrade 2026 - Electric Mobility"
+      "AccountAssignment": "Fleet Upgrade 2026 - Electric Mobility",
+      "ProductIdentifiers": [
+        {
+          "Qualifier": "001",
+          "IdentifierType": "SellersItemIdentification",
+          "ID": "SELLER-ITEM-EBIKE-001",
+          "Description": "Seller article number"
+        },
+        {
+          "Qualifier": "002",
+          "IdentifierType": "BuyersItemIdentification",
+          "ID": "ONE-ITEM-EXAMPLE-EBIKE-0001",
+          "Description": "Buyer article number"
+        },
+        {
+          "Qualifier": "003",
+          "IdentifierType": "StandardItemIdentification",
+          "ID": "GTIN-EXAMPLE-0001",
+          "Description": "GTIN (Global Trade Item Number)",
+          "SchemeID": "0160"
+        },
+        {
+          "Qualifier": "010",
+          "IdentifierType": "ItemClassificationCode",
+          "ID": "25102001",
+          "Description": "UNSPSC classification",
+          "SchemeID": "UNSPSC"
+        }
+      ],
+      "Serialization": [
+        {
+          "SerialNumber": "EBIKE-SN-EXAMPLE-0001",
+          "ItemInstance": true
+        }
+      ],
+      "SustainabilityDocuments": [
+        {
+          "DocumentType": "DPP",
+          "DocumentID": "DPP-EXAMPLE-EBIKE-0001",
+          "DocumentDescription": "DigitalProductPassport",
+          "UBLPath": "AdditionalDocumentReference"
+        },
+        {
+          "DocumentType": "EPD",
+          "DocumentID": "EPD-EXAMPLE-EBIKE-0001",
+          "DocumentDescription": "EnvironmentalProductDeclaration",
+          "UBLPath": "AdditionalDocumentReference"
+        }
+      ],
+      "HazardousMaterial": {
+        "HazardItemID": "HAZ-EBIKE-LIION-001",
+        "UNCode": "UN3481",
+        "HazardClassID": "UN3481",
+        "Description": "Lithium-ion batteries contained in equipment",
+        "UBLPath": "HazardousItem"
+      }
     }
   ],
   "Totals": {
