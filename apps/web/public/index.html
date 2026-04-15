@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Record Demo - SAP to Canonical Transformation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 One Record Demo</h1>
+            <p class="subtitle">SAP Order → fcior-aligned Canonical JSON-LD Transformation</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" data-tab="import">Import</button>
+            <button class="tab" data-tab="orders">Orders</button>
+            <button class="tab" data-tab="viewer">Viewer</button>
+            <button class="tab" data-tab="comparison">Side-by-Side</button>
+            <button class="tab" data-tab="about">About</button>
+        </nav>
+
+        <!-- Import Tab -->
+        <div id="import-tab" class="tab-content active">
+            <h2>Import SAP Order</h2>
+            <div class="import-section">
+                <button id="load-sample-btn" class="btn btn-primary">Load Sample SAP Order</button>
+                <button id="import-btn" class="btn btn-success">Import & Transform</button>
+            </div>
+            <div class="editor-section">
+                <label for="sap-input">SAP Order JSON:</label>
+                <textarea id="sap-input" class="code-editor" placeholder="Paste SAP Order JSON here or click 'Load Sample'"></textarea>
+            </div>
+            <div id="import-result" class="result-section hidden">
+                <h3>Import Result</h3>
+                <pre id="import-result-content"></pre>
+            </div>
+        </div>
+
+        <!-- Orders List Tab -->
+        <div id="orders-tab" class="tab-content">
+            <h2>Imported Orders</h2>
+            <button id="refresh-orders-btn" class="btn btn-secondary">Refresh</button>
+            <div id="orders-list" class="orders-list"></div>
+        </div>
+
+        <!-- Viewer Tab -->
+        <div id="viewer-tab" class="tab-content">
+            <h2>Order Viewer</h2>
+            <div class="viewer-controls">
+                <label for="order-select">Select Order:</label>
+                <select id="order-select" class="form-select">
+                    <option value="">-- Select an order --</option>
+                </select>
+                <div class="button-group">
+                    <button id="view-source-btn" class="btn btn-secondary">View SAP Source</button>
+                    <button id="view-canonical-btn" class="btn btn-primary">View Canonical</button>
+                    <button id="view-report-btn" class="btn btn-info">View Mapping Report</button>
+                </div>
+            </div>
+            <div id="viewer-content" class="viewer-content"></div>
+        </div>
+
+        <!-- Side-by-Side Tab -->
+        <div id="comparison-tab" class="tab-content">
+            <h2>Side-by-Side Comparison</h2>
+            <div class="viewer-controls">
+                <label for="comparison-order-select">Select Order:</label>
+                <select id="comparison-order-select" class="form-select">
+                    <option value="">-- Select an order --</option>
+                </select>
+                <button id="load-comparison-btn" class="btn btn-primary">Load Comparison</button>
+            </div>
+            <div class="comparison-grid">
+                <div class="comparison-col">
+                    <h3>SAP Source</h3>
+                    <pre id="comparison-source" class="code-viewer"></pre>
+                </div>
+                <div class="comparison-col">
+                    <h3>Canonical JSON-LD</h3>
+                    <pre id="comparison-canonical" class="code-viewer"></pre>
+                </div>
+            </div>
+            <div id="comparison-report" class="report-section hidden">
+                <h3>Mapping Statistics</h3>
+                <div id="comparison-stats"></div>
+            </div>
+        </div>
+
+        <!-- About Tab -->
+        <div id="about-tab" class="tab-content">
+            <h2>About This Demo</h2>
+            <div class="about-content">
+                <h3>What is One Record?</h3>
+                <p>
+                    This demo implements a <strong>fcior-aligned canonical business document layer</strong> 
+                    for transforming SAP Orders into semantically grounded JSON-LD documents.
+                </p>
+
+                <h3>Key Technologies</h3>
+                <ul>
+                    <li><strong>fcior</strong> - Finnish Construction Industry One Record (UBL Order subset)</li>
+                    <li><strong>busdoc</strong> - Finnish business document vocabulary (EN 16931-1 compliant)</li>
+                    <li><strong>JSON-LD</strong> - Linked Data format with semantic context</li>
+                    <li><strong>W3C VC-compatible</strong> - Ready for cryptographic signatures</li>
+                </ul>
+
+                <h3>Semantic Vocabularies</h3>
+                <ul>
+                    <li><a href="https://iri.suomi.fi/model/fcior/" target="_blank">fcior vocabulary</a></li>
+                    <li><a href="https://iri.suomi.fi/model/busdoc/" target="_blank">busdoc vocabulary</a></li>
+                </ul>
+
+                <h3>How It Works</h3>
+                <ol>
+                    <li>Import SAP Order JSON</li>
+                    <li>Mapping engine applies 60+ curated transformation rules</li>
+                    <li>Generate fcior-aligned canonical JSON-LD</li>
+                    <li>Store both SAP source and canonical form</li>
+                    <li>Provide explainable mapping report with confidence scores</li>
+                </ol>
+
+                <h3>Features</h3>
+                <ul>
+                    <li>✅ Complete field-level traceability</li>
+                    <li>✅ Confidence scoring for each mapping</li>
+                    <li>✅ Semantic references to fcior/busdoc vocabulary</li>
+                    <li>✅ Dual persistence (SAP + canonical)</li>
+                    <li>✅ Profile versioning for evolution</li>
+                </ul>
+
+                <h3>GitHub Repository</h3>
+                <p><a href="https://github.com/jgmikael/one-record" target="_blank">github.com/jgmikael/one-record</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
