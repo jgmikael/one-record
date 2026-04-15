@@ -1,8 +1,15 @@
 # One Record Demo
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 **SAP Order → fcior-aligned Canonical JSON-LD Transformation**
 
 A production-ready demonstration of semantic business document transformation using Finnish Construction Industry One Record (fcior) vocabulary and W3C Verifiable Credentials-compatible structure.
+
+> 🎯 **Quick Demo**: `npm run demo` → http://localhost:3001/#import?sample=true
 
 ---
 

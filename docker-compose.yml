@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  one-record:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: one-record-demo
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DB_PATH=/app/data/one-record.db
+      - SEED_DB=true
+    volumes:
+      # Persist database
+      - one-record-data:/app/apps/api/data
+      # Optional: Mount samples for easy updates
+      # - ./samples:/app/samples:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  one-record-data:
+    driver: local
+
+# Optional: Add PostgreSQL for production
+#  postgres:
+#    image: postgres:15-alpine
+#    container_name: one-record-postgres
+#    environment:
+#      POSTGRES_DB: onerecord
+#      POSTGRES_USER: onerecord
+#      POSTGRES_PASSWORD: changeme
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
+#    ports:
+#      - "5432:5432"
+#    restart: unless-stopped
+#
+#volumes:
+#  postgres-data:
