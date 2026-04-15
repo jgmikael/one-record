@@ -35,15 +35,47 @@ app.use('/api/orders', createOrderRoutes(repository));
 app.use('/api/mappings', createMappingRoutes());
 app.use('/api', createHealthRoutes(repository));
 
-// Serve static frontend
-const frontendPath = path.join(__dirname, '../../web/public');
-app.use(express.static(frontendPath));
+// Serve static frontend and samples
+const publicPath = path.join(__dirname, '../public');
+const samplesPath = path.join(__dirname, '../../../samples');
 
-// SPA fallback
-app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api/')) {
-    res.sendFile(path.join(frontendPath, 'index.html'));
-  }
+// Serve samples directory
+app.use('/samples', express.static(samplesPath));
+
+// Serve frontend files
+app.use(express.static(publicPath));
+
+// SPA fallback (must be last)
+app.get('*', (req, res, next) => {
+    // Skip API routes
+    if (req.path.startsWith('/api/')) {
+        return next();
+    }
+    
+    // Try to serve static file
+    const indexPath = path.join(publicPath, 'index.html');
+    res.sendFile(indexPath, (err) => {
+        if (err) {
+            // If index.html doesn't exist, send a basic response
+            res.status(200).send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>One Record Demo</title>
+                </head>
+                <body>
+                    <h1>One Record Demo API</h1>
+                    <p>The API is running. Access the web UI by copying files from apps/web/public/ to apps/api/public/</p>
+                    <p>Or run: <code>npm run setup</code></p>
+                    <ul>
+                        <li><a href="/api/health">API Health</a></li>
+                        <li><a href="/api/version">API Version</a></li>
+                    </ul>
+                </body>
+                </html>
+            `);
+        }
+    });
 });
 
 // Error handler (must be last)
@@ -51,19 +83,38 @@ app.use(errorHandler);
 
 // Start server
 const server = app.listen(PORT, () => {
-  console.log(`✅ One Record API server running on http://localhost:${PORT}`);
-  console.log(`📊 Database: ${DB_PATH}`);
-  console.log(`🌐 API docs: http://localhost:${PORT}/api/health`);
+    console.log('');
+    console.log('✅ One Record API server running');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log(`🌐 URL:      http://localhost:${PORT}`);
+    console.log(`📊 API:      http://localhost:${PORT}/api/health`);
+    console.log(`📁 Database: ${DB_PATH}`);
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('');
+    console.log('Quick links:');
+    console.log(`  Import:     http://localhost:${PORT}/#import?sample=true`);
+    console.log(`  API Health: http://localhost:${PORT}/api/health`);
+    console.log(`  API Docs:   http://localhost:${PORT}/api/version`);
+    console.log('');
 });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM received, closing server...');
-  server.close(() => {
-    db.close();
-    console.log('Server closed');
-    process.exit(0);
-  });
+    console.log('SIGTERM received, closing server...');
+    server.close(() => {
+        db.close();
+        console.log('Server closed');
+        process.exit(0);
+    });
+});
+
+process.on('SIGINT', () => {
+    console.log('\nSIGINT received, closing server...');
+    server.close(() => {
+        db.close();
+        console.log('Server closed');
+        process.exit(0);
+    });
 });
 
 export { app, server, db };

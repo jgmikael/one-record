@@ -1,0 +1,13 @@
+{
+  "name": "@one-record/sap-model",
+  "version": "1.0.0",
+  "description": "SAP ECC 6.0 Order model types",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

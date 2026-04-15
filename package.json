@@ -8,13 +8,15 @@
     "apps/*"
   ],
   "scripts": {
-    "install": "npm install --workspaces",
-    "build": "npm run build --workspaces",
-    "start": "npm run start --workspace=@one-record/api",
-    "dev": "npm run dev --workspace=@one-record/api",
+    "postinstall": "node scripts/postinstall.js",
+    "install-all": "npm install --workspaces",
+    "build": "npm run build --workspaces --if-present",
+    "start": "cd apps/api && node -r ts-node/register src/index.ts",
+    "start:prod": "cd apps/api && node dist/index.js",
+    "dev": "cd apps/api && ts-node src/index.ts",
     "test": "npm run test --workspaces --if-present",
-    "clean": "rm -rf node_modules packages/*/node_modules packages/*/dist apps/*/node_modules apps/*/dist",
-    "setup": "npm install && npm run build",
+    "clean": "rm -rf node_modules packages/*/node_modules packages/*/dist apps/*/node_modules apps/*/dist apps/api/data/*.db",
+    "setup": "bash scripts/setup.sh",
     "demo": "npm run setup && npm start"
   },
   "keywords": [
@@ -29,6 +31,11 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "ts-node": "^10.9.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 }

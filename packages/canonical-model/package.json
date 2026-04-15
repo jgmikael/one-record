@@ -1,0 +1,13 @@
+{
+  "name": "@one-record/canonical-model",
+  "version": "1.0.0",
+  "description": "fcior-aligned canonical Order model types and JSON-LD context",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}
