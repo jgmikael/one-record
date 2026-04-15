@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Record SAP Order Demo - Browser Edition</title>
+    <meta name="description" content="Transform SAP orders to fcior/UBL canonical format - live in your browser">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 One Record SAP Order Demo</h1>
+            <p class="subtitle">SAP ECC 6.0 → fcior/UBL Canonical Transformation</p>
+            <p class="info">Browser Edition - No backend required, all processing client-side</p>
+            <div class="badge-group">
+                <span class="badge badge-success">Browser-Based</span>
+                <span class="badge badge-info">W3C VC Compatible</span>
+                <span class="badge badge-warning">localStorage</span>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" data-tab="import">📥 Import</button>
+            <button class="tab" data-tab="orders">📋 Orders</button>
+            <button class="tab" data-tab="viewer">👁️ Viewer</button>
+            <button class="tab" data-tab="comparison">⚖️ Comparison</button>
+            <button class="tab" data-tab="about">ℹ️ About</button>
+        </nav>
+
+        <main id="content">
+            <!-- Content loaded by app.js -->
+        </main>
+
+        <footer>
+            <p>
+                GitHub: <a href="https://github.com/jgmikael/one-record" target="_blank">jgmikael/one-record</a> |
+                Vocabularies: <a href="https://jgmikael.github.io/vocabularies/" target="_blank">fcior, busdoc, WE BUILD</a> |
+                License: MIT
+            </p>
+        </footer>
+    </div>
+
+    <div id="toast-container"></div>
+    
+    <!-- Inline all dependencies for standalone operation -->
+    <script src="engine.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

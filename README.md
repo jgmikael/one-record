@@ -34,22 +34,24 @@ A production-ready demonstration of semantic business document transformation us
 
 ## 🚀 Quick Start
 
-### 🌐 Option 1: Online Demo (Zero Setup!)
+### 🌐 Option 1: GitHub Pages Demo (No Installation!)
 
-**View the static demo instantly in your browser:**
+**Try it live in your browser right now:**
 
 👉 **[https://jgmikael.github.io/one-record/](https://jgmikael.github.io/one-record/)**
 
 ✅ No installation required  
-✅ View transformation results  
-✅ Explore SAP source, canonical output, and mapping report  
-✅ Works on any device with a browser  
+✅ Works entirely in your browser  
+✅ Transform SAP orders to fcior/UBL format  
+✅ Load sample data or paste your own  
+✅ View transformation statistics  
+✅ Zero backend dependency  
 
-> **Note**: The online demo is read-only. For live transformation with custom data, use Option 2 below.
+> **Browser-Based Demo**: Runs 100% client-side using JavaScript. Perfect for quick demos and experimentation!
 
-### 💻 Option 2: Local Interactive Demo
+### 💻 Option 2: Local Full-Featured Demo
 
-Full features including live transformation, API access, and custom imports.
+Complete features including persistent storage, REST API, and advanced mapping reports.
 
 **Prerequisites**: Node.js 18+ and npm
 
@@ -67,7 +69,7 @@ npm start
 
 The application will be available at **http://localhost:3001**
 
-### Quick Demo
+### Quick Demo Walkthrough
 
 1. Open http://localhost:3001 in your browser
 2. Click **"Import"** tab

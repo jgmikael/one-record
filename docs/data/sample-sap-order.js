@@ -1,0 +1,211 @@
+/**
+ * Sample SAP ECC 6.0 Order - Finnish Construction Industry
+ */
+const SAMPLE_SAP_ORDER = {
+  "_comment": "SAP Sales Order - Demo Instance Model",
+  "_description": "Realistic SAP ECC 6.0 Order structure representing Finnish construction industry use case",
+  "OrderHeader": {
+    "SalesDocument": "4500012345",
+    "SalesDocumentType": "OR",
+    "SalesOrganization": "1000",
+    "DistributionChannel": "10",
+    "Division": "00",
+    "SalesOffice": "FIN1",
+    "SalesGroup": "001",
+    "DocumentDate": "2026-04-15",
+    "CreatedBy": "SAPUSER01",
+    "CreatedOn": "2026-04-15",
+    "CreatedAtTime": "10:30:00",
+    "LastChangedBy": "SAPUSER01",
+    "LastChangedOn": "2026-04-15",
+    "PurchaseOrderByCustomer": "PO-2026-0415-001",
+    "CustomerPurchaseOrderDate": "2026-04-12",
+    "RequestedDeliveryDate": "2026-04-25",
+    "PricingDate": "2026-04-15",
+    "DocumentCurrency": "EUR",
+    "ExchangeRate": "1.00000",
+    "PaymentTerms": "ZN30",
+    "IncotermsClassification": "EXW",
+    "IncotermsLocation": "Helsinki",
+    "TotalNetAmount": 12500.00,
+    "TotalTaxAmount": 3000.00,
+    "TotalGrossAmount": 15500.00,
+    "OrderReason": "Standard Construction Order",
+    "CustomerReference": "Project Espoo Tower",
+    "YourReference": "Matti Virtanen",
+    "SalesDistrict": "FI-UUS",
+    "PriceGroup": "01",
+    "PriceList": "STANDARD"
+  },
+  "PartnerFunctions": {
+    "SoldToParty": {
+      "PartnerFunction": "AG",
+      "CustomerNumber": "100234",
+      "Name1": "Rakennusyhtiö Suomi Oy",
+      "Name2": "",
+      "Street": "Mannerheimintie 1",
+      "HouseNumber": "",
+      "PostalCode": "00100",
+      "City": "Helsinki",
+      "Region": "FI-18",
+      "Country": "FI",
+      "TaxNumber1": "FI12345678",
+      "TaxNumber2": "",
+      "TaxClassification": "1",
+      "ContactPerson": "Matti Virtanen",
+      "Telephone": "+358 9 1234567",
+      "EmailAddress": "matti.virtanen@rakennusyhtio.fi",
+      "CustomerGroup": "CONSTR",
+      "PriceListType": "01"
+    },
+    "ShipToParty": {
+      "PartnerFunction": "WE",
+      "CustomerNumber": "100234-01",
+      "Name1": "Rakennusyhtiö Suomi Oy",
+      "Name2": "Työmaa Espoo Tower",
+      "Street": "Otaniementie 15",
+      "HouseNumber": "",
+      "PostalCode": "02150",
+      "City": "Espoo",
+      "Region": "FI-18",
+      "Country": "FI",
+      "UnloadingPoint": "SITE-ESP-01",
+      "ReceivingPlant": "1000"
+    },
+    "BillToParty": {
+      "PartnerFunction": "RE",
+      "CustomerNumber": "100234",
+      "Name1": "Rakennusyhtiö Suomi Oy",
+      "Name2": "Talousosasto",
+      "Street": "Mannerheimintie 1",
+      "HouseNumber": "",
+      "PostalCode": "00100",
+      "City": "Helsinki",
+      "Region": "FI-18",
+      "Country": "FI"
+    },
+    "PayerParty": {
+      "PartnerFunction": "RG",
+      "CustomerNumber": "100234",
+      "Name1": "Rakennusyhtiö Suomi Oy",
+      "PaymentTerms": "ZN30",
+      "AccountGroup": "KUNA"
+    }
+  },
+  "OrderItems": [
+    {
+      "Item": {
+        "ItemNumber": "000010",
+        "HigherLevelItem": "",
+        "ItemCategory": "TAN",
+        "ItemType": "Material"
+      },
+      "Material": {
+        "MaterialNumber": "MAT-CONCRETE-001",
+        "MaterialGroup": "CONCRETE",
+        "MaterialDescription": "C30/37 Betoniseos",
+        "MaterialDescriptionLong": "C30/37 Betoniseos, paksuus 200mm, notkeus S3",
+        "ProductHierarchy": "001001001",
+        "Division": "00"
+      },
+      "Quantity": {
+        "OrderQuantity": 50,
+        "SalesUnit": "M3",
+        "BaseUnit": "M3",
+        "AlternativeUnit": "",
+        "NumeratorConversion": "1",
+        "DenominatorConversion": "1",
+        "QuantityInBaseUnit": 50,
+        "NetWeight": 120000.000,
+        "WeightUnit": "KG",
+        "GrossWeight": 120000.000,
+        "Volume": 50.000,
+        "VolumeUnit": "M3"
+      },
+      "Schedule": {
+        "RequestedDeliveryDate": "2026-04-25",
+        "ConfirmedDeliveryDate": "2026-04-25",
+        "ShippingPoint": "1000",
+        "LoadingGroup": "0001",
+        "TransportationGroup": "0001",
+        "Route": "FIN001"
+      },
+      "Pricing": {
+        "NetPrice": 120.00,
+        "PriceUnit": 1,
+        "PricingUnit": "M3",
+        "Currency": "EUR",
+        "GrossPrice": 120.00,
+        "NetValue": 6000.00,
+        "TaxAmount": 1440.00,
+        "TaxRate": 24.00,
+        "TaxCode": "S1",
+        "TaxClassification": "1",
+        "SubtotalValue": 6000.00,
+        "GrossValue": 7440.00
+      },
+      "Plant": "1000",
+      "StorageLocation": "0001",
+      "ShippingPoint": "1000",
+      "DeliveryPriority": "02",
+      "ItemText": "Toimitus työmaa Espoo Tower, Otaniementie 15"
+    },
+    {
+      "Item": {
+        "ItemNumber": "000020",
+        "HigherLevelItem": "",
+        "ItemCategory": "TAN",
+        "ItemType": "Material"
+      },
+      "Material": {
+        "MaterialNumber": "MAT-REBAR-002",
+        "MaterialGroup": "STEEL",
+        "MaterialDescription": "Teräsverkko K8-150",
+        "MaterialDescriptionLong": "Teräsverkko K8-150, 2000x5000mm, A500HW",
+        "ProductHierarchy": "001002001",
+        "Division": "00"
+      },
+      "Quantity": {
+        "OrderQuantity": 100,
+        "SalesUnit": "PC",
+        "BaseUnit": "PC",
+        "AlternativeUnit": "",
+        "NumeratorConversion": "1",
+        "DenominatorConversion": "1",
+        "QuantityInBaseUnit": 100,
+        "NetWeight": 6250.000,
+        "WeightUnit": "KG",
+        "GrossWeight": 6300.000,
+        "Volume": 0.800,
+        "VolumeUnit": "M3"
+      },
+      "Schedule": {
+        "RequestedDeliveryDate": "2026-04-25",
+        "ConfirmedDeliveryDate": "2026-04-25",
+        "ShippingPoint": "1000",
+        "LoadingGroup": "0002",
+        "TransportationGroup": "0002",
+        "Route": "FIN001"
+      },
+      "Pricing": {
+        "NetPrice": 65.00,
+        "PriceUnit": 1,
+        "PricingUnit": "PC",
+        "Currency": "EUR",
+        "GrossPrice": 65.00,
+        "NetValue": 6500.00,
+        "TaxAmount": 1560.00,
+        "TaxRate": 24.00,
+        "TaxCode": "S1",
+        "TaxClassification": "1",
+        "SubtotalValue": 6500.00,
+        "GrossValue": 8060.00
+      },
+      "Plant": "1000",
+      "StorageLocation": "0002",
+      "ShippingPoint": "1000",
+      "DeliveryPriority": "02",
+      "ItemText": "Toimitus työmaa Espoo Tower, raudoitusverkko"
+    }
+  ]
+};

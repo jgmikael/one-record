@@ -1,0 +1,4 @@
+# GitHub Pages configuration for One Record Demo
+theme: jekyll-theme-minimal
+title: "One Record - SAP to fcior/UBL Transformation"
+description: "Browser-based semantic transformation demo"
