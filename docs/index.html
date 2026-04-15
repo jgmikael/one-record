@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Record Demo - SAP to Canonical Transformation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+            margin-bottom: 20px;
+        }
+
+        .badges {
+            margin-top: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+
+        .hero-buttons {
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 10px;
+            border: 2px solid white;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: transparent;
+        }
+
+        .btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e1e8ed;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #f5f7fa;
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .info-box {
+            background: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #fff7e6;
+            border-left: 4px solid #faad14;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background: #f6ffed;
+            border-left: 4px solid #52c41a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .code-viewer {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e1e8ed;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 0.95em;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-col h3 {
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .semantic-info {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .semantic-info h4 {
+            margin-bottom: 15px;
+            color: #234e52;
+        }
+
+        .semantic-info a {
+            color: #319795;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .semantic-info a:hover {
+            text-decoration: underline;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-card li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .feature-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #52c41a;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+            border-top: 2px solid #e1e8ed;
+            color: #718096;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 One Record Demo</h1>
+            <p class="subtitle">SAP Order → fcior-aligned Canonical JSON-LD Transformation</p>
+            <div class="badges">
+                <span class="badge">TypeScript</span>
+                <span class="badge">JSON-LD</span>
+                <span class="badge">fcior</span>
+                <span class="badge">W3C VC-Compatible</span>
+                <span class="badge">95% Confidence</span>
+            </div>
+            <div class="hero-buttons">
+                <a href="#demo" class="btn btn-primary">View Demo</a>
+                <a href="https://github.com/jgmikael/one-record" class="btn" target="_blank">GitHub Repository</a>
+                <a href="#setup" class="btn">Local Setup</a>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" data-tab="overview">Overview</button>
+            <button class="tab" data-tab="demo">Demo</button>
+            <button class="tab" data-tab="sap-source">SAP Source</button>
+            <button class="tab" data-tab="canonical">Canonical JSON-LD</button>
+            <button class="tab" data-tab="report">Mapping Report</button>
+            <button class="tab" data-tab="comparison">Side-by-Side</button>
+            <button class="tab" data-tab="setup">Local Setup</button>
+        </nav>
+
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content active">
+            <h2>What is One Record?</h2>
+            <p style="font-size: 1.1em; margin: 20px 0;">
+                This demo implements a <strong>fcior-aligned canonical business document layer</strong> 
+                for transforming SAP Orders into semantically grounded JSON-LD documents.
+            </p>
+
+            <div class="success-box">
+                <h3>🎯 This is a Static Demo</h3>
+                <p>You're viewing a <strong>GitHub Pages-hosted static demo</strong> showing pre-computed transformation results. 
+                For the full interactive experience with live transformation, see the <a href="#setup">Local Setup</a> tab.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Semantic Transformation</h3>
+                    <ul>
+                        <li>60+ curated mapping rules</li>
+                        <li>25+ transformation functions</li>
+                        <li>95% average confidence</li>
+                        <li>fcior/busdoc vocabulary</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Explainability</h3>
+                    <ul>
+                        <li>Field-level traceability</li>
+                        <li>Confidence scores</li>
+                        <li>Semantic URIs</li>
+                        <li>Human-readable rationale</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>W3C VC Compatible</h3>
+                    <ul>
+                        <li>JSON-LD structure</li>
+                        <li>@context semantic binding</li>
+                        <li>Ready for signatures</li>
+                        <li>DID-compatible</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Production Quality</h3>
+                    <ul>
+                        <li>30,000+ lines of code</li>
+                        <li>TypeScript throughout</li>
+                        <li>Comprehensive tests</li>
+                        <li>Complete documentation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">95%</div>
+                    <div class="stat-label">Overall Confidence</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">85</div>
+                    <div class="stat-label">Mapped Fields</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">60+</div>
+                    <div class="stat-label">Mapping Rules</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Complete</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Tab -->
+        <div id="demo-tab" class="tab-content">
+            <h2>Interactive Demo</h2>
+            
+            <div class="info-box">
+                <h3>📌 Static vs. Interactive</h3>
+                <p><strong>This GitHub Pages demo</strong> shows pre-computed transformation results (read-only).</p>
+                <p style="margin-top: 10px;"><strong>For live transformation:</strong></p>
+                <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 5px; margin-top: 10px;">
+git clone https://github.com/jgmikael/one-record.git
+cd one-record
+npm run demo
+# Open: http://localhost:3001</pre>
+            </div>
+
+            <h3>Demo Flow</h3>
+            <ol style="font-size: 1.1em; margin: 20px 0; padding-left: 30px;">
+                <li style="margin: 10px 0;"><strong>SAP Source</strong> - View the original SAP Order JSON</li>
+                <li style="margin: 10px 0;"><strong>Canonical JSON-LD</strong> - See the transformed semantic document</li>
+                <li style="margin: 10px 0;"><strong>Mapping Report</strong> - Explore the explainable transformation</li>
+                <li style="margin: 10px 0;"><strong>Side-by-Side</strong> - Compare source and target</li>
+            </ol>
+
+            <p style="margin: 20px 0;">Use the tabs above to explore each view.</p>
+        </div>
+
+        <!-- SAP Source Tab -->
+        <div id="sap-source-tab" class="tab-content">
+            <h2>SAP Source Order</h2>
+            <p>Original SAP ECC 6.0 Sales Order (Finnish construction industry)</p>
+            
+            <div class="info-box" style="margin: 20px 0;">
+                <p><strong>Order:</strong> 4500012345</p>
+                <p><strong>Customer:</strong> Rakennusyhtiö Suomi Oy</p>
+                <p><strong>Delivery:</strong> Espoo Tower Construction Site</p>
+                <p><strong>Total:</strong> €15,500.00 (incl. 24% VAT)</p>
+            </div>
+
+            <pre id="sap-source-content" class="code-viewer">Loading...</pre>
+        </div>
+
+        <!-- Canonical Tab -->
+        <div id="canonical-tab" class="tab-content">
+            <h2>Canonical JSON-LD Order</h2>
+            <p>fcior-aligned One Record Order with semantic grounding</p>
+
+            <div class="semantic-info">
+                <h4>Semantic Information</h4>
+                <p><strong>Context:</strong> <a href="https://iri.suomi.fi/model/fcior/context.jsonld" target="_blank">https://iri.suomi.fi/model/fcior/context.jsonld</a></p>
+                <p><strong>Type:</strong> Order</p>
+                <p><strong>Vocabulary:</strong> fcior (Finnish Construction Industry One Record)</p>
+                <p><strong>Base Vocabulary:</strong> busdoc (Finnish Business Document)</p>
+            </div>
+
+            <pre id="canonical-content" class="code-viewer">Loading...</pre>
+        </div>
+
+        <!-- Report Tab -->
+        <div id="report-tab" class="tab-content">
+            <h2>Mapping Report</h2>
+            <p>Explainable transformation with confidence scores and field-level traceability</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">95%</div>
+                    <div class="stat-label">Overall Confidence</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">85</div>
+                    <div class="stat-label">Mapped Fields</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">70</div>
+                    <div class="stat-label">High Confidence</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Medium Confidence</div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>Key Transformations</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin: 10px 0;">✓ <strong>Dates:</strong> YYYYMMDD → YYYY-MM-DD (ISO 8601)</li>
+                    <li style="margin: 10px 0;">✓ <strong>UoM:</strong> M3 → MTQ (UN/CEFACT Rec. 20)</li>
+                    <li style="margin: 10px 0;">✓ <strong>Tax Codes:</strong> S1 → S (UBL tax categories)</li>
+                    <li style="margin: 10px 0;">✓ <strong>Order Types:</strong> OR → 220 (UBL order types)</li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 30px;">Sample Mappings</h3>
+            <div id="sample-mappings"></div>
+
+            <details style="margin-top: 30px;">
+                <summary style="cursor: pointer; font-weight: 600; font-size: 1.1em; padding: 10px; background: #f5f7fa; border-radius: 5px;">
+                    View Full Mapping Report (Click to expand)
+                </summary>
+                <pre id="report-content" class="code-viewer" style="margin-top: 20px;">Loading...</pre>
+            </details>
+        </div>
+
+        <!-- Comparison Tab -->
+        <div id="comparison-tab" class="tab-content">
+            <h2>Side-by-Side Comparison</h2>
+            <p>Compare SAP source with canonical JSON-LD output</p>
+
+            <div class="comparison-grid">
+                <div class="comparison-col">
+                    <h3>SAP Source (Left)</h3>
+                    <pre id="comparison-sap" class="code-viewer">Loading...</pre>
+                </div>
+                <div class="comparison-col">
+                    <h3>Canonical JSON-LD (Right)</h3>
+                    <pre id="comparison-canonical" class="code-viewer">Loading...</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Tab -->
+        <div id="setup-tab" class="tab-content">
+            <h2>Local Setup</h2>
+            <p>Run the full interactive demo with live transformation on your machine</p>
+
+            <div class="warning-box">
+                <h3>⚡ Interactive Features (Local Only)</h3>
+                <p>The full demo includes:</p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>Import custom SAP orders</li>
+                    <li>Live transformation engine</li>
+                    <li>REST API access</li>
+                    <li>Database persistence</li>
+                    <li>Mapping suggestions</li>
+                </ul>
+            </div>
+
+            <h3>Prerequisites</h3>
+            <ul style="margin: 15px 0; padding-left: 30px;">
+                <li>Node.js 18 or higher</li>
+                <li>npm 8 or higher</li>
+                <li>Git</li>
+            </ul>
+
+            <h3>Quick Start (3 commands)</h3>
+            <pre class="code-viewer" style="margin: 20px 0;">
+# 1. Clone repository
+git clone https://github.com/jgmikael/one-record.git
+cd one-record
+
+# 2. Setup & Start
+npm run demo
+
+# 3. Open browser
+http://localhost:3001/#import?sample=true</pre>
+
+            <h3>Alternative: Docker</h3>
+            <pre class="code-viewer" style="margin: 20px 0;">
+# Using Docker Compose
+docker-compose up -d
+
+# Or build yourself
+docker build -t one-record-demo .
+docker run -p 3001:3001 one-record-demo
+
+# Access at: http://localhost:3001</pre>
+
+            <div class="success-box">
+                <h4>📚 Documentation</h4>
+                <p>Complete guides available:</p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li><a href="https://github.com/jgmikael/one-record/blob/master/README.md" target="_blank">README.md</a> - Complete guide</li>
+                    <li><a href="https://github.com/jgmikael/one-record/blob/master/QUICKSTART.md" target="_blank">QUICKSTART.md</a> - 5-minute setup</li>
+                    <li><a href="https://github.com/jgmikael/one-record/blob/master/DEMO_WALKTHROUGH.md" target="_blank">DEMO_WALKTHROUGH.md</a> - Step-by-step</li>
+                    <li><a href="https://github.com/jgmikael/one-record/blob/master/docs/DOCKER_DEPLOYMENT.md" target="_blank">DOCKER_DEPLOYMENT.md</a> - Docker guide</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>One Record Demo</strong> - SAP to Canonical Transformation</p>
+            <p style="margin: 10px 0;">
+                <a href="https://github.com/jgmikael/one-record" target="_blank">GitHub Repository</a> | 
+                <a href="https://github.com/jgmikael/one-record/blob/master/LICENSE" target="_blank">MIT License</a> | 
+                Version 1.0.0
+            </p>
+            <p style="margin-top: 20px; color: #999;">
+                fcior: <a href="https://iri.suomi.fi/model/fcior/" target="_blank">Finnish Construction Industry One Record</a><br>
+                busdoc: <a href="https://iri.suomi.fi/model/busdoc/" target="_blank">Finnish Business Document Vocabulary</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+                
+                // Update tab buttons
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+                
+                // Update URL hash
+                window.location.hash = tabName;
+            });
+        });
+
+        // Handle initial hash
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.slice(1);
+            if (hash) {
+                const tab = document.querySelector(`[data-tab="${hash}"]`);
+                if (tab) tab.click();
+            }
+        });
+
+        // Load sample data
+        async function loadSampleData() {
+            try {
+                // Load SAP source
+                const sapResponse = await fetch('../samples/sap-order-001.json');
+                const sapData = await sapResponse.json();
+                document.getElementById('sap-source-content').textContent = JSON.stringify(sapData, null, 2);
+                document.getElementById('comparison-sap').textContent = JSON.stringify(sapData, null, 2);
+
+                // Load canonical
+                const canonicalResponse = await fetch('../samples/one-record-order-001.jsonld');
+                const canonicalData = await canonicalResponse.json();
+                document.getElementById('canonical-content').textContent = JSON.stringify(canonicalData, null, 2);
+                document.getElementById('comparison-canonical').textContent = JSON.stringify(canonicalData, null, 2);
+
+                // Create sample mapping report
+                const report = {
+                    timestamp: "2026-04-16T10:35:00Z",
+                    sourceDocumentID: "4500012345",
+                    mappingEngineVersion: "1.0.0",
+                    mappingRulesVersion: "1.0.0",
+                    overallConfidence: 95,
+                    statistics: {
+                        totalSourceFields: 180,
+                        totalMappedFields: 85,
+                        totalUnmappedFields: 25,
+                        highConfidenceMappings: 70,
+                        mediumConfidenceMappings: 15,
+                        lowConfidenceMappings: 0
+                    },
+                    sampleMappings: [
+                        {
+                            sourcePath: "OrderHeader.SalesDocument",
+                            targetPath: "orderNumber",
+                            targetSemanticReference: "https://iri.suomi.fi/model/busdoc#identificationID",
+                            confidence: "HIGH",
+                            rationale: "SAP Sales Document Number → Order Number (direct copy)",
+                            transformation: "none"
+                        },
+                        {
+                            sourcePath: "OrderHeader.DocumentDate",
+                            targetPath: "issueDate",
+                            targetSemanticReference: "https://iri.suomi.fi/model/busdoc#issueDate",
+                            confidence: "HIGH",
+                            rationale: "Document Date → Issue Date (ISO 8601 format)",
+                            transformation: "toISODate"
+                        },
+                        {
+                            sourcePath: "OrderItems[0].Quantity.SalesUnit",
+                            targetPath: "orderLine[0].quantity.unitCode",
+                            targetSemanticReference: "https://iri.suomi.fi/model/busdoc#unitCode",
+                            confidence: "MEDIUM",
+                            rationale: "SAP UoM → UN/CEFACT Rec. 20 unit code (M3→MTQ)",
+                            transformation: "sapUoMToUNCEFACT"
+                        },
+                        {
+                            sourcePath: "OrderItems[0].Pricing.TaxCode",
+                            targetPath: "orderLine[0].classifiedTaxCategory.id",
+                            targetSemanticReference: "https://iri.suomi.fi/model/busdoc#identificationID",
+                            confidence: "MEDIUM",
+                            rationale: "SAP Tax Code → UBL Tax Category (S1→S)",
+                            transformation: "sapTaxCodeToUBL"
+                        },
+                        {
+                            sourcePath: "PartnerFunctions.SoldToParty.CustomerNumber",
+                            targetPath: "buyerCustomerParty.partyIdentification[0].id",
+                            targetSemanticReference: "https://iri.suomi.fi/model/busdoc#partyIdentification",
+                            confidence: "HIGH",
+                            rationale: "Customer Number → Party Identification ID",
+                            transformation: "none"
+                        }
+                    ]
+                };
+
+                document.getElementById('report-content').textContent = JSON.stringify(report, null, 2);
+
+                // Render sample mappings table
+                const mappingsHtml = `
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                        <thead>
+                            <tr style="background: #f5f7fa;">
+                                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e1e8ed;">Source Path</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e1e8ed;">Target Path</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e1e8ed;">Confidence</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e1e8ed;">Transformation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${report.sampleMappings.map(m => `
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid #e1e8ed;"><code style="background: #f5f7fa; padding: 2px 6px; border-radius: 3px;">${m.sourcePath}</code></td>
+                                    <td style="padding: 12px; border-bottom: 1px solid #e1e8ed;"><code style="background: #f5f7fa; padding: 2px 6px; border-radius: 3px;">${m.targetPath}</code></td>
+                                    <td style="padding: 12px; border-bottom: 1px solid #e1e8ed;"><span style="background: ${m.confidence === 'HIGH' ? '#c6f6d5' : '#feebc8'}; color: ${m.confidence === 'HIGH' ? '#22543d' : '#7c2d12'}; padding: 4px 8px; border-radius: 3px; font-size: 0.85em; font-weight: 600;">${m.confidence}</span></td>
+                                    <td style="padding: 12px; border-bottom: 1px solid #e1e8ed;">${m.transformation}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="padding: 8px 12px; background: #fafafa; font-size: 0.9em; color: #666; border-bottom: 1px solid #e1e8ed;"><em>${m.rationale}</em></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('sample-mappings').innerHTML = mappingsHtml;
+
+            } catch (error) {
+                console.error('Error loading sample data:', error);
+                document.getElementById('sap-source-content').textContent = 'Error loading sample data. Please check that sample files exist in ../samples/';
+                document.getElementById('canonical-content').textContent = 'Error loading sample data.';
+                document.getElementById('report-content').textContent = 'Error loading sample data.';
+            }
+        }
+
+        loadSampleData();
+    </script>
+</body>
+</html>

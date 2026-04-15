@@ -34,12 +34,24 @@ A production-ready demonstration of semantic business document transformation us
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 🌐 Option 1: Online Demo (Zero Setup!)
 
-- **Node.js** 18+ and npm
-- Git
+**View the static demo instantly in your browser:**
 
-### Installation & Run
+👉 **[https://jgmikael.github.io/one-record/](https://jgmikael.github.io/one-record/)**
+
+✅ No installation required  
+✅ View transformation results  
+✅ Explore SAP source, canonical output, and mapping report  
+✅ Works on any device with a browser  
+
+> **Note**: The online demo is read-only. For live transformation with custom data, use Option 2 below.
+
+### 💻 Option 2: Local Interactive Demo
+
+Full features including live transformation, API access, and custom imports.
+
+**Prerequisites**: Node.js 18+ and npm
 
 ```bash
 # Clone the repository
@@ -64,6 +76,13 @@ The application will be available at **http://localhost:3001**
 5. Go to **"Orders"** tab to see the imported order
 6. Click on the order to view the canonical JSON-LD
 7. Use **"Side-by-Side"** tab to compare SAP source with canonical output
+
+### 🐳 Option 3: Docker
+
+```bash
+docker-compose up -d
+# Access at http://localhost:3001
+```
 
 ---
 
