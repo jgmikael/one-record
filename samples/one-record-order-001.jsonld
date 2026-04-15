@@ -1,0 +1,340 @@
+{
+  "@context": "https://iri.suomi.fi/model/fcior/context/order/v1",
+  "@type": "Order",
+  "@id": "urn:order:sap:4500012345",
+  
+  "orderNumber": "4500012345",
+  "issueDate": "2026-04-15",
+  "issueTime": "10:30:00",
+  "orderTypeCode": "220",
+  "documentCurrencyCode": "EUR",
+  "buyerReference": "PO-2026-0415-001",
+  "accountingCost": "Project Espoo Tower - Foundation",
+  
+  "buyerCustomerParty": {
+    "@type": "Party",
+    "partyIdentification": [
+      {
+        "@type": "PartyIdentification",
+        "id": "100234",
+        "schemeID": "SAP Customer Number"
+      }
+    ],
+    "partyName": [
+      {
+        "@type": "PartyName",
+        "name": "Rakennusyhtiö Suomi Oy"
+      }
+    ],
+    "postalAddress": {
+      "@type": "Address",
+      "streetName": "Mannerheimintie",
+      "buildingNumber": "1",
+      "cityName": "Helsinki",
+      "postalZone": "00100",
+      "countrySubentity": "FI-18",
+      "countryCode": "FI",
+      "fullAddress": "Mannerheimintie 1, 00100 Helsinki, Finland"
+    },
+    "partyTaxScheme": {
+      "@type": "PartyTaxScheme",
+      "companyID": "FI12345678",
+      "taxScheme": "VAT"
+    },
+    "contact": {
+      "@type": "Contact",
+      "name": "Matti Virtanen",
+      "telephone": "+358 9 1234567",
+      "electronicMail": "matti.virtanen@rakennusyhtio.fi"
+    }
+  },
+  
+  "sellerSupplierParty": {
+    "@type": "Party",
+    "partyIdentification": [
+      {
+        "@type": "PartyIdentification",
+        "id": "1000",
+        "schemeID": "SAP Sales Organization"
+      }
+    ],
+    "partyName": [
+      {
+        "@type": "PartyName",
+        "name": "Rakennustarvike Oy"
+      }
+    ],
+    "postalAddress": {
+      "@type": "Address",
+      "streetName": "Teollisuustie",
+      "buildingNumber": "5",
+      "cityName": "Helsinki",
+      "postalZone": "00510",
+      "countryCode": "FI",
+      "fullAddress": "Teollisuustie 5, 00510 Helsinki, Finland"
+    }
+  },
+  
+  "delivery": {
+    "@type": "Delivery",
+    "requestedDeliveryDate": "2026-04-25",
+    "deliveryLocation": {
+      "@type": "Address",
+      "streetName": "Otaniementie",
+      "buildingNumber": "15",
+      "cityName": "Espoo",
+      "postalZone": "02150",
+      "countryCode": "FI",
+      "fullAddress": "Otaniementie 15, 02150 Espoo, Finland"
+    }
+  },
+  
+  "deliveryTerms": {
+    "@type": "DeliveryTerms",
+    "incoterms": "EXW",
+    "specialTerms": "Ex Works Helsinki"
+  },
+  
+  "paymentTerms": {
+    "@type": "PaymentTerms",
+    "note": "Net 30 days",
+    "settlementPeriod": 30
+  },
+  
+  "orderLine": [
+    {
+      "@type": "OrderLine",
+      "id": "000010",
+      "note": "Toimitus työmaa Espoo Tower, Otaniementie 15",
+      "quantity": {
+        "@type": "Quantity",
+        "value": 50,
+        "unitCode": "MTQ",
+        "unitName": "cubic meter"
+      },
+      "lineExtensionAmount": {
+        "@type": "Amount",
+        "value": 6000.00,
+        "currencyCode": "EUR"
+      },
+      "totalTaxAmount": {
+        "@type": "Amount",
+        "value": 1440.00,
+        "currencyCode": "EUR"
+      },
+      "item": {
+        "@type": "Item",
+        "description": "C30/37 Betoniseos, paksuus 200mm, notkeus S3",
+        "name": "C30/37 Betoniseos",
+        "sellersItemIdentification": {
+          "@type": "ItemIdentification",
+          "id": "MAT-CONCRETE-001",
+          "schemeID": "SAP Material Number"
+        },
+        "buyersItemIdentification": {
+          "@type": "ItemIdentification",
+          "id": "CUST-CONC-C30",
+          "schemeID": "Customer Material Number"
+        },
+        "commodityClassification": [
+          {
+            "@type": "ItemClassification",
+            "itemClassificationCode": "001001001",
+            "listID": "SAP Product Hierarchy"
+          }
+        ]
+      },
+      "price": {
+        "@type": "Price",
+        "priceAmount": {
+          "@type": "Amount",
+          "value": 120.00,
+          "currencyCode": "EUR"
+        },
+        "baseQuantity": {
+          "@type": "Quantity",
+          "value": 1,
+          "unitCode": "MTQ"
+        }
+      },
+      "requestedDeliveryPeriod": {
+        "@type": "Period",
+        "startDate": "2026-04-25",
+        "endDate": "2026-04-25"
+      },
+      "classifiedTaxCategory": {
+        "@type": "TaxCategory",
+        "id": "S",
+        "percent": 24.00,
+        "taxScheme": "VAT"
+      },
+      "accountingCost": "P-1000-001-01"
+    },
+    {
+      "@type": "OrderLine",
+      "id": "000020",
+      "note": "Toimitus työmaa Espoo Tower, raudoitusverkko",
+      "quantity": {
+        "@type": "Quantity",
+        "value": 100,
+        "unitCode": "PCE",
+        "unitName": "piece"
+      },
+      "lineExtensionAmount": {
+        "@type": "Amount",
+        "value": 6500.00,
+        "currencyCode": "EUR"
+      },
+      "totalTaxAmount": {
+        "@type": "Amount",
+        "value": 1560.00,
+        "currencyCode": "EUR"
+      },
+      "item": {
+        "@type": "Item",
+        "description": "Teräsverkko K8-150, 2000x5000mm, A500HW",
+        "name": "Teräsverkko K8-150",
+        "sellersItemIdentification": {
+          "@type": "ItemIdentification",
+          "id": "MAT-REBAR-002",
+          "schemeID": "SAP Material Number"
+        },
+        "buyersItemIdentification": {
+          "@type": "ItemIdentification",
+          "id": "CUST-STEEL-K8",
+          "schemeID": "Customer Material Number"
+        },
+        "manufacturersItemIdentification": {
+          "@type": "ItemIdentification",
+          "id": "RVK8150",
+          "schemeID": "Manufacturer Part Number"
+        },
+        "commodityClassification": [
+          {
+            "@type": "ItemClassification",
+            "itemClassificationCode": "001002001",
+            "listID": "SAP Product Hierarchy"
+          }
+        ],
+        "additionalItemProperty": [
+          {
+            "name": "Manufacturer",
+            "value": "RUUKKI"
+          },
+          {
+            "name": "Dimensions",
+            "value": "2000x5000mm"
+          },
+          {
+            "name": "Steel Grade",
+            "value": "A500HW"
+          }
+        ]
+      },
+      "price": {
+        "@type": "Price",
+        "priceAmount": {
+          "@type": "Amount",
+          "value": 65.00,
+          "currencyCode": "EUR"
+        },
+        "baseQuantity": {
+          "@type": "Quantity",
+          "value": 1,
+          "unitCode": "PCE"
+        }
+      },
+      "requestedDeliveryPeriod": {
+        "@type": "Period",
+        "startDate": "2026-04-25",
+        "endDate": "2026-04-25"
+      },
+      "classifiedTaxCategory": {
+        "@type": "TaxCategory",
+        "id": "S",
+        "percent": 24.00,
+        "taxScheme": "VAT"
+      },
+      "accountingCost": "P-1000-001-01"
+    }
+  ],
+  
+  "taxTotal": [
+    {
+      "@type": "TaxTotal",
+      "taxAmount": {
+        "@type": "Amount",
+        "value": 3000.00,
+        "currencyCode": "EUR"
+      },
+      "taxSubtotal": [
+        {
+          "@type": "TaxSubtotal",
+          "taxableAmount": {
+            "@type": "Amount",
+            "value": 12500.00,
+            "currencyCode": "EUR"
+          },
+          "taxAmount": {
+            "@type": "Amount",
+            "value": 3000.00,
+            "currencyCode": "EUR"
+          },
+          "taxCategory": {
+            "@type": "TaxCategory",
+            "id": "S",
+            "percent": 24.00,
+            "taxScheme": "VAT"
+          }
+        }
+      ]
+    }
+  ],
+  
+  "anticipatedMonetaryTotal": {
+    "@type": "MonetaryTotal",
+    "lineExtensionAmount": {
+      "@type": "Amount",
+      "value": 12500.00,
+      "currencyCode": "EUR"
+    },
+    "taxExclusiveAmount": {
+      "@type": "Amount",
+      "value": 12500.00,
+      "currencyCode": "EUR"
+    },
+    "taxInclusiveAmount": {
+      "@type": "Amount",
+      "value": 15500.00,
+      "currencyCode": "EUR"
+    },
+    "payableAmount": {
+      "@type": "Amount",
+      "value": 15500.00,
+      "currencyCode": "EUR"
+    }
+  },
+  
+  "note": [
+    "Standard Construction Order",
+    "Project Espoo Tower",
+    "Delivery to construction site"
+  ],
+  
+  "contractDocumentReference": {
+    "@type": "DocumentReference",
+    "id": "Project Espoo Tower",
+    "documentType": "Project Reference"
+  },
+  
+  "_metadata": {
+    "@type": "SourceMetadata",
+    "sourceSystem": "SAP_ECC_6.0",
+    "sourceDocumentType": "SD Sales Order",
+    "sourceDocumentID": "4500012345",
+    "transformedAt": "2026-04-15T10:35:00Z",
+    "mappingEngineVersion": "1.0.0",
+    "mappingRulesVersion": "1.0.0",
+    "dataOrigin": "SD Sales Order Entry"
+  }
+}
