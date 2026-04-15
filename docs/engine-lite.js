@@ -1,12 +1,18 @@
 /**
  * One Record Mapping Engine - Browser Lite Version
- * Simplified transformation engine for browser-based demos
+ * Supports both legacy JSON format and authentic ORDERS05 IDoc structure
  */
 
 class OneRecordEngine {
     transform(sapOrder) {
         try {
-            const canonical = this.buildCanonicalOrder(sapOrder);
+            // Detect if this is IDoc format (has E1EDK01) or legacy format (has OrderHeader)
+            const isIdoc = sapOrder.E1EDK01 !== undefined;
+            
+            const canonical = isIdoc 
+                ? this.buildCanonicalFromIdoc(sapOrder)
+                : this.buildCanonicalOrder(sapOrder);
+            
             const stats = this.calculateStats(sapOrder, canonical);
             
             return {
@@ -24,13 +30,291 @@ class OneRecordEngine {
         }
     }
 
-    buildCanonicalOrder(sap) {
-        const header = sap.OrderHeader || {};
-        const partners = sap.PartnerFunctions || {};
+    /**
+     * Build canonical order from ORDERS05 IDoc structure
+     */
+    buildCanonicalFromIdoc(idoc) {
+        const header = idoc.E1EDK01 || {};
+        const dates = Array.isArray(idoc.E1EDK03) ? idoc.E1EDK03 : [];
+        const partners = Array.isArray(idoc.E1EDKA1) ? idoc.E1EDKA1 : [];
+        const items = Array.isArray(idoc.E1EDP01) ? idoc.E1EDP01 : [];
+        const control = idoc.EDI_DC40 || {};
+        const totals = idoc.E1EDS01 || {};
+
+        // Find partners by PARVW (partner function)
+        const soldTo = partners.find(p => p.PARVW === "AG") || {};
+        const shipTo = partners.find(p => p.PARVW === "WE") || {};
+        const billTo = partners.find(p => p.PARVW === "RE") || {};
+        const seller = partners.find(p => p.PARVW === "LF") || {};
+        const supplier = partners.find(p => p.PARVW === "BA") || {};
+
+        // Find dates by IDDAT (date qualifier)
+        const issueDate = dates.find(d => d.IDDAT === "022") || {};
+        const deliveryDate = dates.find(d => d.IDDAT === "002") || {};
+
+        return {
+            "@context": {
+                "@vocab": "https://iri.suomi.fi/model/fcior/",
+                "busdoc": "https://iri.suomi.fi/model/busdoc/",
+                "ubl": "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+            },
+            "@type": "Order",
+            "orderId": header.BELNR,
+            "issueDate": this.formatIdocDate(issueDate.DATUM),
+            "orderTypeCode": header.ACTION,
+            "note": header.AUGRU,
+            "documentCurrencyCode": header.CURCY,
+            "customerReference": header.BSARK,
+            "buyerReference": soldTo.PARNR,
+            
+            "buyerCustomerParty": {
+                "@type": "Party",
+                "partyIdentification": {
+                    "id": soldTo.PARTN,
+                    "schemeID": control.RCVPRN
+                },
+                "partyName": soldTo.NAME1,
+                "postalAddress": {
+                    "streetName": soldTo.STRAS,
+                    "additionalStreetName": soldTo.STRS2,
+                    "cityName": soldTo.ORT01,
+                    "postalZone": soldTo.PSTLZ,
+                    "countrySubentity": soldTo.REGIO,
+                    "country": {
+                        "identificationCode": soldTo.LAND1
+                    }
+                },
+                "partyTaxScheme": {
+                    "companyId": soldTo.STCD1,
+                    "taxScheme": {
+                        "id": "VAT"
+                    }
+                },
+                "contact": {
+                    "name": soldTo.PARNR,
+                    "telephone": soldTo.TELF1,
+                    "electronicMail": soldTo.ITEFN
+                }
+            },
+
+            "sellerSupplierParty": seller.PARTN ? {
+                "@type": "Party",
+                "partyIdentification": {
+                    "id": seller.PARTN,
+                    "schemeID": control.SNDPRN
+                },
+                "partyName": seller.NAME1,
+                "postalAddress": {
+                    "streetName": seller.STRAS,
+                    "cityName": seller.ORT01,
+                    "postalZone": seller.PSTLZ,
+                    "country": {
+                        "identificationCode": seller.LAND1
+                    }
+                },
+                "contact": {
+                    "telephone": seller.TELF1,
+                    "electronicMail": seller.ITEFN
+                }
+            } : undefined,
+
+            "deliveryTerms": {
+                "incoterms": header.INCO1,
+                "deliveryLocation": header.INCO2
+            },
+
+            "deliveryAddress": {
+                "streetName": shipTo.STRAS,
+                "cityName": shipTo.ORT01,
+                "postalZone": shipTo.PSTLZ,
+                "country": {
+                    "identificationCode": shipTo.LAND1
+                }
+            },
+
+            "paymentTerms": {
+                "paymentTermsCode": header.ZTERM,
+                "note": this.mapPaymentTerms(header.ZTERM)
+            },
+
+            "anticipatedMonetaryTotal": totals.SUMME ? {
+                "lineExtensionAmount": {
+                    "value": parseFloat(totals.SUMME),
+                    "currencyID": totals.SUNIT || header.CURCY
+                },
+                "taxExclusiveAmount": {
+                    "value": parseFloat(totals.SUMME),
+                    "currencyID": totals.SUNIT || header.CURCY
+                },
+                "taxInclusiveAmount": {
+                    "value": parseFloat(totals.SUMME) + parseFloat(totals.MWSBT || 0),
+                    "currencyID": totals.SUNIT || header.CURCY
+                },
+                "payableAmount": {
+                    "value": parseFloat(totals.SUMME) + parseFloat(totals.MWSBT || 0),
+                    "currencyID": totals.SUNIT || header.CURCY
+                }
+            } : undefined,
+
+            "orderLine": items.map((item, index) => this.mapIdocOrderLine(item, index, header))
+        };
+    }
+
+    /**
+     * Map ORDERS05 IDoc line item (E1EDP01)
+     */
+    mapIdocOrderLine(e1edp01, index, header) {
+        const prices = Array.isArray(e1edp01.E1EDP05) ? e1edp01.E1EDP05 : [];
+        const identifiers = Array.isArray(e1edp01.E1EDP19) ? e1edp01.E1EDP19 : [];
+        const serials = Array.isArray(e1edp01.E1EDP35) ? e1edp01.E1EDP35 : [];
+        const docs = Array.isArray(e1edp01.E1EDP20) ? e1edp01.E1EDP20 : [];
+        const dates = Array.isArray(e1edp01.E1EDK03) ? e1edp01.E1EDK03 : [];
+
+        // Find price conditions
+        const netPrice = prices.find(p => p.KSCHL === "PR00") || {};
+        const tax = prices.find(p => p.KSCHL === "MWST") || {};
+
+        // Build item object
+        const itemObj = {
+            "@type": "Item",
+            "name": this.findIdocIdentifier(identifiers, "001", "KTEXT") || "Item",
+            "description": this.findIdocIdentifier(identifiers, "001", "KTEXT") || "",
+            "classifiedTaxCategory": {
+                "id": tax.KSCHL || "MWST",
+                "percent": parseFloat(tax.KBETR || 0),
+                "taxScheme": {
+                    "id": "VAT"
+                }
+            }
+        };
+
+        // Add product identifiers from E1EDP19
+        identifiers.forEach(id19 => {
+            if (id19.QUALF === "001") {
+                itemObj.sellersItemIdentification = { "id": id19.IDTNR };
+            } else if (id19.QUALF === "002") {
+                itemObj.buyersItemIdentification = { "id": id19.IDTNR };
+            } else if (id19.QUALF === "003") {
+                itemObj.standardItemIdentification = {
+                    "id": id19.IDTNR,
+                    "schemeID": "0160"
+                };
+            } else if (id19.QUALF === "010") {
+                itemObj.commodityClassification = {
+                    "itemClassificationCode": {
+                        "value": id19.IDTNR,
+                        "listID": "UNSPSC"
+                    }
+                };
+            }
+        });
+
+        // Add serialization from E1EDP35
+        if (serials.length > 0) {
+            itemObj.itemInstance = serials.map(s => ({
+                "serialID": s.SERIAL
+            }));
+        }
+
+        // Find hazardous material from E1EDP20
+        const hazmat = docs.find(d => d.WMESSION_TXT && d.WMESSION_TXT.startsWith("UN"));
+        if (hazmat) {
+            itemObj.hazardousItem = {
+                "id": hazmat.WMESSION,
+                "hazardClassID": hazmat.WMESSION_TXT,
+                "undgCode": hazmat.WMESSION_TXT
+            };
+        }
+
+        // Build line item
+        const lineItem = {
+            "@type": "OrderLine",
+            "id": this.formatLineNumber(e1edp01.POSEX),
+            "note": e1edp01.POSEX_TEXT,
+            "lineItem": {
+                "@type": "LineItem",
+                "id": this.formatLineNumber(e1edp01.POSEX),
+                "quantity": {
+                    "value": parseFloat(e1edp01.MENGE),
+                    "unitCode": e1edp01.MENEE
+                },
+                "lineExtensionAmount": {
+                    "value": parseFloat(netPrice.BETRG || 0) * parseFloat(e1edp01.MENGE || 0),
+                    "currencyID": netPrice.KWAEH || header.CURCY
+                },
+                "item": itemObj,
+                "price": {
+                    "priceAmount": {
+                        "value": parseFloat(netPrice.BETRG || 0),
+                        "currencyID": netPrice.KWAEH || header.CURCY
+                    },
+                    "baseQuantity": {
+                        "value": 1,
+                        "unitCode": netPrice.KMEIN || e1edp01.MENEE
+                    }
+                }
+            },
+            "delivery": {
+                "@type": "Delivery",
+                "requestedDeliveryPeriod": dates.find(d => d.IDDAT === "002") ? {
+                    "endDate": this.formatIdocDate(dates.find(d => d.IDDAT === "002").DATUM)
+                } : undefined,
+                "deliveryLocation": {
+                    "id": e1edp01.VSTEL
+                }
+            }
+        };
+
+        // Add sustainability documents from E1EDP20 (DPP, EPD)
+        const sustainabilityDocs = docs.filter(d => 
+            d.WMESSION_TXT === "DigitalProductPassport" || 
+            d.WMESSION_TXT === "EnvironmentalProductDeclaration"
+        );
+        
+        if (sustainabilityDocs.length > 0) {
+            lineItem.additionalDocumentReference = sustainabilityDocs.map(doc => ({
+                "id": doc.WMESSION,
+                "documentType": doc.WMESSION_TXT === "DigitalProductPassport" ? "DPP" : "EPD",
+                "documentDescription": doc.WMESSION_TXT
+            }));
+        }
+
+        return lineItem;
+    }
+
+    /**
+     * Find identifier from E1EDP19 array
+     */
+    findIdocIdentifier(identifiers, qualf, field = "IDTNR") {
+        const found = identifiers.find(id => id.QUALF === qualf);
+        return found ? found[field] : null;
+    }
+
+    /**
+     * Format IDoc date (YYYYMMDD) to ISO date (YYYY-MM-DD)
+     */
+    formatIdocDate(datum) {
+        if (!datum || datum.length !== 8) return null;
+        return `${datum.substring(0, 4)}-${datum.substring(4, 6)}-${datum.substring(6, 8)}`;
+    }
+
+    /**
+     * Format line number (000010 -> 1)
+     */
+    formatLineNumber(posex) {
+        return posex ? parseInt(posex, 10).toString() : "1";
+    }
+
+    /**
+     * Build canonical order from legacy JSON format
+     */
+    buildCanonicalOrder(sapOrder) {
+        const header = sapOrder.OrderHeader || {};
+        const partners = sapOrder.PartnerFunctions || {};
         const soldTo = partners.SoldToParty || {};
         const shipTo = partners.ShipToParty || {};
         const billTo = partners.BillToParty || {};
-        const items = sap.OrderItems || [];
+        const items = sapOrder.OrderItems || [];
 
         return {
             "@context": {
@@ -114,81 +398,21 @@ class OneRecordEngine {
                 }
             },
 
-            "orderLine": items.map((item, index) => this.mapOrderLine(item, index, header))
+            "orderLine": items.map((item, index) => this.mapLegacyOrderLine(item, index, header))
         };
     }
 
-    mapOrderLine(sapItem, index, header) {
+    /**
+     * Map legacy format order line
+     */
+    mapLegacyOrderLine(sapItem, index, header) {
         const item = sapItem.Item || {};
         const material = sapItem.Material || {};
         const quantity = sapItem.Quantity || {};
         const pricing = sapItem.Pricing || {};
         const schedule = sapItem.Schedule || {};
-        const productIds = sapItem.ProductIdentifiers || [];
-        const serialization = sapItem.Serialization || [];
-        const sustainability = sapItem.SustainabilityDocuments || [];
-        const hazmat = sapItem.HazardousMaterial || null;
 
-        // Build item object with extended identifiers
-        const itemObj = {
-            "@type": "Item",
-            "description": material.MaterialDescription,
-            "name": material.MaterialDescription,
-            "classifiedTaxCategory": {
-                "id": pricing.TaxCode,
-                "percent": pricing.TaxRate,
-                "taxScheme": {
-                    "id": "VAT"
-                }
-            }
-        };
-
-        // Add product identifiers from E1EDP19 segments
-        productIds.forEach(pid => {
-            if (pid.IdentifierType === "SellersItemIdentification") {
-                itemObj.sellersItemIdentification = { "id": pid.ID };
-            } else if (pid.IdentifierType === "BuyersItemIdentification") {
-                itemObj.buyersItemIdentification = { "id": pid.ID };
-            } else if (pid.IdentifierType === "StandardItemIdentification") {
-                itemObj.standardItemIdentification = {
-                    "id": pid.ID,
-                    "schemeID": pid.SchemeID || "GTIN"
-                };
-            } else if (pid.IdentifierType === "ItemClassificationCode") {
-                itemObj.commodityClassification = {
-                    "itemClassificationCode": {
-                        "value": pid.ID,
-                        "listID": pid.SchemeID || "UNSPSC"
-                    }
-                };
-            }
-        });
-
-        // Fallback to legacy fields if no ProductIdentifiers
-        if (!itemObj.sellersItemIdentification && material.MaterialNumber) {
-            itemObj.sellersItemIdentification = { "id": material.MaterialNumber };
-        }
-        if (!itemObj.buyersItemIdentification && sapItem.CustomerMaterialNumber) {
-            itemObj.buyersItemIdentification = { "id": sapItem.CustomerMaterialNumber };
-        }
-
-        // Add serialization (E1EDP35)
-        if (serialization.length > 0) {
-            itemObj.itemInstance = serialization.map(s => ({
-                "serialID": s.SerialNumber
-            }));
-        }
-
-        // Add hazardous material info (E1EDP20)
-        if (hazmat) {
-            itemObj.hazardousItem = {
-                "id": hazmat.HazardItemID,
-                "hazardClassID": hazmat.HazardClassID,
-                "undgCode": hazmat.UNCode
-            };
-        }
-
-        const lineItem = {
+        return {
             "@type": "OrderLine",
             "id": item.ItemNumber || `${index + 1}`,
             "note": sapItem.ItemText,
@@ -203,7 +427,24 @@ class OneRecordEngine {
                     "value": pricing.NetValue,
                     "currencyID": pricing.Currency || header.DocumentCurrency
                 },
-                "item": itemObj,
+                "item": {
+                    "@type": "Item",
+                    "description": material.MaterialDescription,
+                    "name": material.MaterialDescription,
+                    "sellersItemIdentification": {
+                        "id": material.MaterialNumber
+                    },
+                    "buyersItemIdentification": {
+                        "id": sapItem.CustomerMaterialNumber || material.MaterialNumber
+                    },
+                    "classifiedTaxCategory": {
+                        "id": pricing.TaxCode,
+                        "percent": pricing.TaxRate,
+                        "taxScheme": {
+                            "id": "VAT"
+                        }
+                    }
+                },
                 "price": {
                     "priceAmount": {
                         "value": pricing.NetPrice,
@@ -225,21 +466,11 @@ class OneRecordEngine {
                 }
             }
         };
-
-        // Add sustainability documents (E1EDP20 - DPP, EPD)
-        if (sustainability.length > 0) {
-            lineItem.additionalDocumentReference = sustainability.map(doc => ({
-                "id": doc.DocumentID,
-                "documentType": doc.DocumentType,
-                "documentDescription": doc.DocumentDescription
-            }));
-        }
-
-        return lineItem;
     }
 
     mapPaymentTerms(code) {
         const terms = {
+            'Z030': 'Net 30 days',
             'ZN30': 'Net 30 days',
             'ZN14': 'Net 14 days',
             'ZN60': 'Net 60 days',
@@ -250,10 +481,15 @@ class OneRecordEngine {
 
     calculateStats(sapOrder, canonical) {
         const fieldCount = this.countFields(canonical);
-        const lineItemCount = (sapOrder.OrderItems || []).length;
         
-        // Simplified confidence calculation
-        // In the full version, this comes from the mapping report
+        // Detect format and count line items
+        let lineItemCount;
+        if (sapOrder.E1EDP01) {
+            lineItemCount = Array.isArray(sapOrder.E1EDP01) ? sapOrder.E1EDP01.length : 0;
+        } else {
+            lineItemCount = (sapOrder.OrderItems || []).length;
+        }
+        
         const confidence = 95;
 
         return {
@@ -264,7 +500,7 @@ class OneRecordEngine {
     }
 
     countFields(obj, depth = 0) {
-        if (depth > 10) return 0; // Prevent deep recursion
+        if (depth > 10) return 0;
         
         let count = 0;
         for (const key in obj) {
@@ -272,7 +508,6 @@ class OneRecordEngine {
                 count++;
                 if (typeof obj[key] === 'object' && obj[key] !== null) {
                     if (Array.isArray(obj[key])) {
-                        // Count array items
                         obj[key].forEach(item => {
                             if (typeof item === 'object') {
                                 count += this.countFields(item, depth + 1);

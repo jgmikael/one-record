@@ -1,292 +1,227 @@
 /**
- * Sample SAP ECC 6.0 Order #2 - Electronics/Equipment Industry
- * Based on ORDERS05 IDoc structure with UK buyer scenario
+ * Sample SAP ORDERS05 IDoc #2 - Electronics/Equipment Industry
+ * Using authentic IDoc XML element names (CURCY, ZTERM, PARVW, etc.)
  */
 const SAMPLE_SAP_ORDER_002 = {
-  "_comment": "SAP Sales Order - Electronics Industry Example",
-  "_description": "UK buyer ordering electric bikes from European supplier - based on ORDERS05 IDoc structure",
-  "OrderHeader": {
-    "SalesDocument": "ONE-ORD-0001",
-    "SalesDocumentType": "OR",
-    "SalesOrganization": "2000",
-    "DistributionChannel": "10",
-    "Division": "20",
-    "SalesOffice": "GB01",
-    "SalesGroup": "002",
-    "DocumentDate": "2026-01-01",
-    "CreatedBy": "SAPUSER02",
-    "CreatedOn": "2026-01-01",
-    "CreatedAtTime": "14:15:00",
-    "LastChangedBy": "SAPUSER02",
-    "LastChangedOn": "2026-01-01",
-    "PurchaseOrderByCustomer": "PO-GB-2026-0001",
-    "CustomerPurchaseOrderDate": "2025-12-28",
-    "RequestedDeliveryDate": "2026-02-01",
-    "PricingDate": "2026-01-01",
-    "DocumentCurrency": "EUR",
-    "ExchangeRate": "0.85000",
-    "PaymentTerms": "Z030",
-    "IncotermsClassification": "DDP",
-    "IncotermsLocation": "Buyertown",
-    "TotalNetAmount": 25000.00,
-    "TotalTaxAmount": 5000.00,
-    "TotalGrossAmount": 30000.00,
-    "OrderReason": "Standard Equipment Order",
-    "CustomerReference": "Fleet Upgrade 2026",
-    "YourReference": "John Smith",
-    "SalesDistrict": "GB-LONDON",
-    "PriceGroup": "02",
-    "PriceList": "EXPORT"
+  "_comment": "SAP ORDERS05 IDoc - Electronics Industry Example",
+  "_description": "UK buyer ordering electric bikes from European supplier - authentic ORDERS05 IDoc structure",
+  
+  "EDI_DC40": {
+    "TABNAM": "EDI_DC40",
+    "DIRECT": "1",
+    "IDOCTYP": "ORDERS05",
+    "MESTYP": "ORDERS",
+    "SNDPOR": "SAPEXP",
+    "SNDPRT": "LS",
+    "SNDPRN": "SAPCLNT200",
+    "RCVPRN": "ONE-PARTY-SEL-0001"
   },
-  "PartnerFunctions": {
-    "SoldToParty": {
-      "PartnerFunction": "AG",
-      "CustomerNumber": "EX-BUY-0001",
-      "Name1": "ExampleBuyer Ltd",
-      "Name2": "Procurement Department",
-      "Street": "Buyer Street",
-      "HouseNumber": "Building One",
-      "PostalCode": "10001",
-      "City": "Buyertown",
-      "Region": "GB-LND",
-      "Country": "GB",
-      "TaxNumber1": "GB123456789",
-      "TaxNumber2": "",
-      "TaxClassification": "1",
-      "ContactPerson": "John Smith",
-      "Telephone": "+44 7000 000001",
-      "EmailAddress": "purchasing@examplebuyer.com",
-      "CustomerGroup": "ELEC",
-      "PriceListType": "02"
-    },
-    "ShipToParty": {
-      "PartnerFunction": "WE",
-      "CustomerNumber": "DELIVERY-LOC-0001",
-      "Name1": "Example Logistics Hub London",
-      "Name2": "Warehouse 3",
-      "Street": "Buyer Street",
-      "HouseNumber": "",
-      "PostalCode": "10001",
-      "City": "Buyertown",
-      "Region": "GB-LND",
-      "Country": "GB",
-      "UnloadingPoint": "DOCK-A",
-      "ReceivingPlant": "2000"
-    },
-    "BillToParty": {
-      "PartnerFunction": "RE",
-      "CustomerNumber": "EX-BUY-0001",
-      "Name1": "ExampleBuyer Ltd",
-      "Name2": "Finance Department",
-      "Street": "Buyer Street",
-      "HouseNumber": "Building One",
-      "PostalCode": "10001",
-      "City": "Buyertown",
-      "Region": "GB-LND",
-      "Country": "GB"
-    },
-    "PayerParty": {
-      "PartnerFunction": "RG",
-      "CustomerNumber": "EX-BUY-0001",
-      "Name1": "ExampleBuyer Ltd",
-      "PaymentTerms": "Z030",
-      "AccountGroup": "KUNA"
-    },
-    "SellerParty": {
-      "PartnerFunction": "LF",
-      "CustomerNumber": "EX-SEL-0001",
-      "Name1": "ExampleSeller Plc",
-      "Name2": "Sales Division",
-      "Street": "Seller Avenue",
-      "HouseNumber": "",
-      "PostalCode": "20002",
-      "City": "Sellerville",
-      "Region": "GB-LND",
-      "Country": "GB",
-      "Telephone": "+44 7000 000002",
-      "EmailAddress": "sales@example-seller.com"
-    },
-    "SupplierParty": {
-      "PartnerFunction": "BA",
-      "CustomerNumber": "EX-SUP-0001",
-      "Name1": "ExampleSupplier GmbH",
-      "Name2": "Distribution Center",
-      "Street": "Supplier Road",
-      "HouseNumber": "",
-      "PostalCode": "30003",
-      "City": "Supply City",
-      "Region": "DE-BE",
-      "Country": "DE",
-      "Telephone": "+49 7000 000003",
-      "EmailAddress": "dispatch@example-supplier.com"
-    }
+
+  "E1EDK01": {
+    "ACTION": "000",
+    "CURCY": "EUR",
+    "ZTERM": "Z030",
+    "BELNR": "ONE-ORD-0001",
+    "NTGEW": "28.5",
+    "GEPTS": "KGM",
+    "WKURS": "0.85000",
+    "INCO1": "DDP",
+    "INCO2": "Buyertown",
+    "AUGRU": "Standard Equipment Order",
+    "BSARK": "Fleet Upgrade 2026",
+    "IHREZ": "John Smith"
   },
-  "OrderItems": [
+
+  "E1EDK03": [
     {
-      "Item": {
-        "ItemNumber": "000010",
-        "HigherLevelItem": "",
-        "ItemCategory": "TAN",
-        "ItemType": "Material"
-      },
-      "Material": {
-        "MaterialNumber": "SELLER-ITEM-EBIKE-001",
-        "MaterialGroup": "EBIKES",
-        "MaterialDescription": "Example Electric Bike",
-        "MaterialDescriptionLong": "Electric Bike Model X1, 250W motor, 50km range, aluminum frame",
-        "ProductHierarchy": "002001001",
-        "Division": "20"
-      },
-      "Quantity": {
-        "OrderQuantity": 10,
-        "SalesUnit": "EA",
-        "BaseUnit": "EA",
-        "AlternativeUnit": "",
-        "NumeratorConversion": "1",
-        "DenominatorConversion": "1",
-        "QuantityInBaseUnit": 10,
-        "NetWeight": 28.500,
-        "WeightUnit": "KGM",
-        "GrossWeight": 30.000,
-        "Volume": 0.850,
-        "VolumeUnit": "MTQ"
-      },
-      "Schedule": {
-        "RequestedDeliveryDate": "2026-02-01",
-        "ConfirmedDeliveryDate": "2026-02-01",
-        "ShippingPoint": "2000",
-        "LoadingGroup": "0001",
-        "TransportationGroup": "0001",
-        "Route": "GB001"
-      },
-      "Pricing": {
-        "NetPrice": 2500.00,
-        "PriceUnit": 1,
-        "PricingUnit": "EA",
-        "Currency": "EUR",
-        "GrossPrice": 2500.00,
-        "NetValue": 25000.00,
-        "TaxAmount": 5000.00,
-        "TaxRate": 20.00,
-        "TaxCode": "V1",
-        "TaxClassification": "1",
-        "SubtotalValue": 25000.00,
-        "GrossValue": 30000.00
-      },
-      "Conditions": [
-        {
-          "ConditionType": "PR00",
-          "ConditionDescription": "Unit Price",
-          "ConditionValue": 2500.00,
-          "ConditionCurrency": "EUR",
-          "ConditionUnit": "EA"
-        },
-        {
-          "ConditionType": "MWST",
-          "ConditionDescription": "VAT",
-          "ConditionRate": 20.00,
-          "ConditionValue": 5000.00,
-          "ConditionCurrency": "EUR"
-        }
-      ],
-      "Plant": "2000",
-      "StorageLocation": "0001",
-      "ShippingPoint": "2000",
-      "DeliveryPriority": "02",
-      "ItemText": "Delivery to Example Logistics Hub London, Warehouse 3",
-      "CustomerMaterialNumber": "BUYER-EBIKE-X1",
-      "MaterialGroup1": "TRANSPORT",
-      "MaterialGroup2": "ELECTRIC",
-      "MaterialGroup3": "BIKES",
-      "ProfitCenter": "2000",
-      "WBSElement": "P-2000-FL-01",
-      "AccountAssignment": "Fleet Upgrade 2026 - Electric Mobility",
-      "ProductIdentifiers": [
-        {
-          "Qualifier": "001",
-          "IdentifierType": "SellersItemIdentification",
-          "ID": "SELLER-ITEM-EBIKE-001",
-          "Description": "Seller article number"
-        },
-        {
-          "Qualifier": "002",
-          "IdentifierType": "BuyersItemIdentification",
-          "ID": "ONE-ITEM-EXAMPLE-EBIKE-0001",
-          "Description": "Buyer article number"
-        },
-        {
-          "Qualifier": "003",
-          "IdentifierType": "StandardItemIdentification",
-          "ID": "GTIN-EXAMPLE-0001",
-          "Description": "GTIN (Global Trade Item Number)",
-          "SchemeID": "0160"
-        },
-        {
-          "Qualifier": "010",
-          "IdentifierType": "ItemClassificationCode",
-          "ID": "25102001",
-          "Description": "UNSPSC classification",
-          "SchemeID": "UNSPSC"
-        }
-      ],
-      "Serialization": [
-        {
-          "SerialNumber": "EBIKE-SN-EXAMPLE-0001",
-          "ItemInstance": true
-        }
-      ],
-      "SustainabilityDocuments": [
-        {
-          "DocumentType": "DPP",
-          "DocumentID": "DPP-EXAMPLE-EBIKE-0001",
-          "DocumentDescription": "DigitalProductPassport",
-          "UBLPath": "AdditionalDocumentReference"
-        },
-        {
-          "DocumentType": "EPD",
-          "DocumentID": "EPD-EXAMPLE-EBIKE-0001",
-          "DocumentDescription": "EnvironmentalProductDeclaration",
-          "UBLPath": "AdditionalDocumentReference"
-        }
-      ],
-      "HazardousMaterial": {
-        "HazardItemID": "HAZ-EBIKE-LIION-001",
-        "UNCode": "UN3481",
-        "HazardClassID": "UN3481",
-        "Description": "Lithium-ion batteries contained in equipment",
-        "UBLPath": "HazardousItem"
-      }
+      "IDDAT": "022",
+      "DATUM": "20260101"
+    },
+    {
+      "IDDAT": "002",
+      "DATUM": "20260201"
     }
   ],
-  "Totals": {
-    "HeaderTotals": {
-      "TotalNetValueItems": 25000.00,
-      "TotalTaxAmount": 5000.00,
-      "TotalGrossAmount": 30000.00,
-      "Currency": "EUR"
+
+  "E1EDKA1": [
+    {
+      "PARVW": "AG",
+      "PARTN": "EX-BUY-0001",
+      "NAME1": "ExampleBuyer Ltd",
+      "NAME2": "Procurement Department",
+      "STRAS": "Buyer Street",
+      "STRS2": "Building One",
+      "ORT01": "Buyertown",
+      "PSTLZ": "10001",
+      "LAND1": "GB",
+      "REGIO": "GB-LND",
+      "STCD1": "GB123456789",
+      "STCD2": "",
+      "STCEG": "1",
+      "PARNR": "John Smith",
+      "TELF1": "+44 7000 000001",
+      "ITEFN": "purchasing@examplebuyer.com"
     },
-    "TaxBreakdown": [
-      {
-        "TaxCode": "V1",
-        "TaxDescription": "Standard VAT 20%",
-        "TaxRate": 20.00,
-        "TaxableAmount": 25000.00,
-        "TaxAmount": 5000.00,
-        "TaxJurisdiction": "GB",
-        "Currency": "EUR"
-      }
-    ]
+    {
+      "PARVW": "WE",
+      "PARTN": "DELIVERY-LOC-0001",
+      "NAME1": "Example Logistics Hub London",
+      "NAME2": "Warehouse 3",
+      "STRAS": "Buyer Street",
+      "ORT01": "Buyertown",
+      "PSTLZ": "10001",
+      "LAND1": "GB",
+      "REGIO": "GB-LND",
+      "ABLAD": "DOCK-A"
+    },
+    {
+      "PARVW": "RE",
+      "PARTN": "EX-BUY-0001",
+      "NAME1": "ExampleBuyer Ltd",
+      "NAME2": "Finance Department",
+      "STRAS": "Buyer Street",
+      "STRS2": "Building One",
+      "ORT01": "Buyertown",
+      "PSTLZ": "10001",
+      "LAND1": "GB",
+      "REGIO": "GB-LND"
+    },
+    {
+      "PARVW": "RG",
+      "PARTN": "EX-BUY-0001",
+      "NAME1": "ExampleBuyer Ltd",
+      "ZTERM": "Z030"
+    },
+    {
+      "PARVW": "LF",
+      "PARTN": "EX-SEL-0001",
+      "NAME1": "ExampleSeller Plc",
+      "NAME2": "Sales Division",
+      "STRAS": "Seller Avenue",
+      "ORT01": "Sellerville",
+      "PSTLZ": "20002",
+      "LAND1": "GB",
+      "REGIO": "GB-LND",
+      "TELF1": "+44 7000 000002",
+      "ITEFN": "sales@example-seller.com"
+    },
+    {
+      "PARVW": "BA",
+      "PARTN": "EX-SUP-0001",
+      "NAME1": "ExampleSupplier GmbH",
+      "NAME2": "Distribution Center",
+      "STRAS": "Supplier Road",
+      "ORT01": "Supply City",
+      "PSTLZ": "30003",
+      "LAND1": "DE",
+      "REGIO": "DE-BE",
+      "TELF1": "+49 7000 000003",
+      "ITEFN": "dispatch@example-supplier.com"
+    }
+  ],
+
+  "E1EDP01": [
+    {
+      "POSEX": "000010",
+      "ACTION": "000",
+      "MENGE": "10.000",
+      "MENEE": "EA",
+      "NTGEW": "28.500",
+      "GEWEI": "KGM",
+      "BRGEW": "30.000",
+      "VOLUM": "0.850",
+      "VOLEH": "MTQ",
+      "WERKS": "2000",
+      "LGORT": "0001",
+      "VSTEL": "2000",
+      "LPRIO": "02",
+      "POSEX_TEXT": "Delivery to Example Logistics Hub London, Warehouse 3",
+
+      "E1EDP05": [
+        {
+          "KSCHL": "PR00",
+          "BETRG": "2500.00",
+          "KWAEH": "EUR",
+          "KMEIN": "EA"
+        },
+        {
+          "KSCHL": "MWST",
+          "KBETR": "20.00",
+          "KWERT": "5000.00",
+          "KWAEH": "EUR"
+        }
+      ],
+
+      "E1EDP19": [
+        {
+          "QUALF": "001",
+          "IDTNR": "SELLER-ITEM-EBIKE-001",
+          "KTEXT": "Example Electric Bike"
+        },
+        {
+          "QUALF": "002",
+          "IDTNR": "ONE-ITEM-EXAMPLE-EBIKE-0001"
+        },
+        {
+          "QUALF": "003",
+          "IDTNR": "GTIN-EXAMPLE-0001"
+        },
+        {
+          "QUALF": "010",
+          "IDTNR": "25102001"
+        }
+      ],
+
+      "E1EDP35": [
+        {
+          "SERIAL": "EBIKE-SN-EXAMPLE-0001"
+        }
+      ],
+
+      "E1EDP20": [
+        {
+          "WMESSION": "DPP-EXAMPLE-EBIKE-0001",
+          "WMESSION_TXT": "DigitalProductPassport"
+        },
+        {
+          "WMESSION": "EPD-EXAMPLE-EBIKE-0001",
+          "WMESSION_TXT": "EnvironmentalProductDeclaration"
+        },
+        {
+          "WMESSION": "HAZ-EBIKE-LIION-001",
+          "WMESSION_TXT": "UN3481"
+        }
+      ],
+
+      "E1EDK03": [
+        {
+          "IDDAT": "002",
+          "DATUM": "20260201"
+        }
+      ]
+    }
+  ],
+
+  "E1EDS01": {
+    "SUMID": "001",
+    "SUMME": "25000.00",
+    "SUNIT": "EUR",
+    "MWSKZ": "V1",
+    "MSATZ": "20.00",
+    "MWSBT": "5000.00",
+    "TXJCD": "GB"
   },
-  "Status": {
-    "OverallStatus": "A",
-    "ProcessingStatus": "Open",
-    "DeliveryStatus": "Not yet processed",
-    "BillingStatus": "Not yet processed",
-    "RejectionStatus": "",
-    "CreditStatus": "Released",
-    "BlockStatus": ""
+
+  "STATUS": {
+    "GBSTK": "A",
+    "UVALL": "Open",
+    "LFSTK": "Not yet processed",
+    "FKSTK": "Not yet processed",
+    "ABSTK": "",
+    "CMGST": "Released"
   },
-  "Metadata": {
+
+  "METADATA": {
     "SourceSystem": "SAP_ECC_6.0",
     "SystemClient": "200",
     "LogicalSystem": "SAPGB",
@@ -297,10 +232,6 @@ const SAMPLE_SAP_ORDER_002 = {
     "UserRole": "Sales Processor",
     "OrganizationUnit": "Sales UK",
     "IdocType": "ORDERS05",
-    "MessageType": "ORDERS",
-    "SenderPort": "SAPEXP",
-    "SenderPartnerType": "LS",
-    "SenderPartnerNumber": "SAPCLNT200",
-    "ReceiverPartnerNumber": "ONE-PARTY-SEL-0001"
+    "MessageType": "ORDERS"
   }
 };
