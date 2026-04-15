@@ -1,0 +1,22 @@
+{
+  "name": "@one-record/mapping-engine",
+  "version": "1.0.0",
+  "description": "SAP to One Record Order transformation engine",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "natural": "^6.2.0",
+    "string-similarity": "^4.0.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.191",
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.4"
+  }
+}
